@@ -1,0 +1,879 @@
+2025-04-24 15:06:08,958 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:06:08,958 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:06:08,958 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:06:08,958 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:06:08,958 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:06:09,862 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.90s
+2025-04-24 15:06:09,862 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    logger.debug(f"First property data: {json.dumps(properties[0] if properties else {}, indent=2)[:500]}...")
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:06:09,865 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.91s
+2025-04-24 15:06:09,865 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:06:09,874 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:06:09,874 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:06:09,874 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:06:09,874 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:06:09,874 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:06:10,752 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.88s
+2025-04-24 15:06:10,752 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    logger.debug(f"First property data: {json.dumps(properties[0] if properties else {}, indent=2)[:500]}...")
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:06:10,753 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.88s
+2025-04-24 15:06:10,754 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:06:10,759 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:06:10,760 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:06:10,761 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:06:10,761 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:06:10,761 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:06:11,146 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.39s
+2025-04-24 15:06:11,147 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    logger.debug(f"First property data: {json.dumps(properties[0] if properties else {}, indent=2)[:500]}...")
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:06:11,148 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.39s
+2025-04-24 15:06:11,149 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:07:57,380 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:07:57,381 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:07:57,382 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:07:57,382 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:07:57,382 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:07:58,844 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 1.46s
+2025-04-24 15:07:58,845 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    logger.debug(f"First property data: {json.dumps(properties[0] if properties else {}, indent=2)[:500]}...")
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:07:58,846 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 1.46s
+2025-04-24 15:07:58,846 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:01,707 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:01,708 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:01,708 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:01,708 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:01,708 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:01,708 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:02,051 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.34s
+2025-04-24 15:08:02,052 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:02,055 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.35s
+2025-04-24 15:08:02,055 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:02,056 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:02,056 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:02,056 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:02,056 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:03,096 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 1.04s
+2025-04-24 15:08:03,097 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:03,105 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 1.05s
+2025-04-24 15:08:03,111 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:20,157 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:20,159 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:20,159 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:20,159 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:20,159 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:20,515 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.36s
+2025-04-24 15:08:20,515 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:20,515 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.36s
+2025-04-24 15:08:20,515 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:22,851 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:22,851 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:22,851 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:22,851 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:22,851 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:22,852 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:23,150 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.30s
+2025-04-24 15:08:23,150 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:23,151 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.30s
+2025-04-24 15:08:23,152 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:23,152 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:23,152 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:23,152 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:23,152 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:24,054 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.90s
+2025-04-24 15:08:24,054 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:24,057 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.90s
+2025-04-24 15:08:24,057 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:56,530 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:56,539 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:08:56,539 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:08:56,539 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:08:56,539 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:08:56,880 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:08:56,880 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:56,883 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.34s
+2025-04-24 15:08:56,887 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:56,887 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:08:56,887 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:08:56,887 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:08:56,887 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:08:57,775 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:08:57,776 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:57,777 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.89s
+2025-04-24 15:08:58,802 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:58,802 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:58,802 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:58,802 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:58,802 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:59,109 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.31s
+2025-04-24 15:08:59,109 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:59,111 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.31s
+2025-04-24 15:08:59,111 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:08:59,117 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:08:59,118 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:08:59,118 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:08:59,118 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:08:59,119 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:08:59,972 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.85s
+2025-04-24 15:08:59,972 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:08:59,975 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.86s
+2025-04-24 15:08:59,975 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:00,100 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:00,100 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:00,100 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:00,100 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:00,100 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:00,412 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.31s
+2025-04-24 15:09:00,412 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:00,413 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.31s
+2025-04-24 15:09:00,413 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:00,420 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:00,421 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:00,421 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:00,421 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:00,421 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:01,291 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.87s
+2025-04-24 15:09:01,291 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:01,293 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.87s
+2025-04-24 15:09:01,293 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:06,848 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:06,849 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/2
+2025-04-24 15:09:06,849 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 2
+2025-04-24 15:09:06,849 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 2
+2025-04-24 15:09:06,849 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 2
+2025-04-24 15:09:07,126 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 2
+2025-04-24 15:09:07,126 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 2: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:07,127 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 2 after 0.28s
+2025-04-24 15:09:07,129 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:07,129 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/2
+2025-04-24 15:09:07,129 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 2
+2025-04-24 15:09:07,129 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 2
+2025-04-24 15:09:07,129 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 2
+2025-04-24 15:09:08,049 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 2
+2025-04-24 15:09:08,049 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 2: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:08,050 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 2 after 0.92s
+2025-04-24 15:09:09,275 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:09,275 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:09,275 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:09,275 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:09,276 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:09,574 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.30s
+2025-04-24 15:09:09,574 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:09,575 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.30s
+2025-04-24 15:09:09,575 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:09,578 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:09,578 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:09,578 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:09,579 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:09,579 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:10,451 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.87s
+2025-04-24 15:09:10,452 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:10,454 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.88s
+2025-04-24 15:09:10,454 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:14,262 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:14,273 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:09:14,273 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:09:14,273 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:09:14,273 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:09:14,561 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:09:14,561 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:14,561 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.29s
+2025-04-24 15:09:14,566 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:14,566 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:09:14,566 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:09:14,566 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:09:14,566 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:09:15,474 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:09:15,476 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:15,477 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.91s
+2025-04-24 15:09:33,415 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:33,416 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:33,416 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:33,416 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:33,416 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:33,712 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.30s
+2025-04-24 15:09:33,713 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:33,715 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.30s
+2025-04-24 15:09:33,715 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:33,725 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:33,726 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:33,726 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:33,726 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:33,726 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:34,618 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.89s
+2025-04-24 15:09:34,618 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:34,621 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.89s
+2025-04-24 15:09:34,621 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:36,350 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:36,351 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:36,351 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:36,351 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:36,351 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:36,652 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.30s
+2025-04-24 15:09:36,652 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:36,653 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.30s
+2025-04-24 15:09:36,653 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:09:36,663 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:09:36,663 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:09:36,663 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:09:36,663 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:09:36,663 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:09:37,535 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.87s
+2025-04-24 15:09:37,535 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    doc = self.properties_collection.document(property_id).get()
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:09:37,539 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.88s
+2025-04-24 15:09:37,539 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:13:29,263 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:29,267 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:13:29,267 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:13:29,267 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:13:29,267 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:13:30,745 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 1.48s
+2025-04-24 15:13:30,745 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:30,750 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 1.48s
+2025-04-24 15:13:30,750 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:13:30,763 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:30,763 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:13:30,763 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:13:30,763 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:13:30,763 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:13:31,057 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.29s
+2025-04-24 15:13:31,059 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:31,062 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.30s
+2025-04-24 15:13:31,062 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:13:32,927 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:32,929 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:13:32,929 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:13:32,929 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:13:32,929 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:13:33,246 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:13:33,247 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+    # Try exact match first
+                            
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:33,248 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.32s
+2025-04-24 15:13:33,255 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:33,255 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties/1
+2025-04-24 15:13:33,255 - app.routers.properties - INFO - [properties.py:125] - Fetching property with ID: 1
+2025-04-24 15:13:33,255 - app.services.firestore - INFO - [firestore.py:119] - Fetching property with ID: 1
+2025-04-24 15:13:33,255 - app.services.firestore - INFO - [firestore.py:131] - Querying Firestore for property with ID: 1
+2025-04-24 15:13:34,128 - app.services.firestore - INFO - [firestore.py:136] - Found property with ID: 1
+2025-04-24 15:13:34,134 - app.services.firestore - ERROR - [firestore.py:142] - Error fetching property 1: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 137, in get_property_by_id
+    # Try exact match first
+                            
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:34,136 - app.routers.properties - WARNING - [properties.py:130] - Property not found with ID: 1 after 0.88s
+2025-04-24 15:13:35,852 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:35,852 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:13:35,852 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:13:35,852 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:13:35,852 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:13:36,163 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.31s
+2025-04-24 15:13:36,163 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:36,164 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.31s
+2025-04-24 15:13:36,164 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
+2025-04-24 15:13:36,166 - app.services.firestore - INFO - [firestore.py:23] - Initialized Firestore with collection: properties
+2025-04-24 15:13:36,166 - app.routers.properties - INFO - [properties.py:56] - Request from 127.0.0.1: GET http://localhost:8000/properties
+2025-04-24 15:13:36,166 - app.routers.properties - INFO - [properties.py:73] - Fetching all properties
+2025-04-24 15:13:36,166 - app.services.firestore - INFO - [firestore.py:92] - Fetching all properties
+2025-04-24 15:13:36,166 - app.services.firestore - INFO - [firestore.py:102] - Querying Firestore properties collection
+2025-04-24 15:13:37,024 - app.services.firestore - INFO - [firestore.py:110] - Fetched 3 properties from Firestore in 0.86s
+2025-04-24 15:13:37,025 - app.services.firestore - ERROR - [firestore.py:113] - Error fetching properties: Object of type DatetimeWithNanoseconds is not JSON serializable
+Traceback (most recent call last):
+  File "/Users/ronnjoshuanucup/real-estate/backend/app/services/firestore.py", line 111, in get_all_properties
+    if self.is_mock:
+                     
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/opt/homebrew/anaconda3/lib/python3.11/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type DatetimeWithNanoseconds is not JSON serializable
+2025-04-24 15:13:37,026 - app.routers.properties - INFO - [properties.py:77] - Successfully retrieved 3 properties in 0.86s
+2025-04-24 15:13:37,027 - app.routers.properties - DEBUG - [properties.py:78] - Properties data summary: [3 items] First few: [{'features': ['Waterfront', 'Private Pool', 'Gourmet Kitchen', 'Private Elevator', 'Three-Car Garag...
