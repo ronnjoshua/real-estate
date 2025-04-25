@@ -44,7 +44,9 @@ export const firestoreService = {
     }
   ): Promise<{ properties: Property[]; lastVisible: QueryDocumentSnapshot<DocumentData> | undefined }> {
     try {
+      console.log('Fetching properties from Firestore...');
       let q = collection(db, 'properties');
+      console.log('Collection reference:', q);
       
       // Build query with filters
       const conditions = [];
@@ -73,15 +75,21 @@ export const firestoreService = {
       }
 
       const snapshot = await getDocs(q);
+      console.log('Number of documents retrieved:', snapshot.docs.length);
       const properties = snapshot.docs.map(convertToProperty);
+      console.log('Converted properties:', properties);
+      
       const newLastVisible = snapshot.docs[snapshot.docs.length - 1];
-
       return {
         properties,
         lastVisible: newLastVisible
       };
     } catch (error) {
       console.error('Error fetching properties:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
       return { properties: [], lastVisible: undefined };
     }
   },
@@ -103,21 +111,47 @@ export const firestoreService = {
 
   async createProperty(property: PropertyCreate): Promise<Property | null> {
     try {
+      console.log('Starting property creation with data:', property);
+      
+      // Verify Firestore is initialized
+      if (!db) {
+        console.error('Firestore database is not initialized');
+        return null;
+      }
+
       const propertyWithTimestamp = {
         ...property,
+        status: 'available',
         createdAt: new Date(),
         updatedAt: new Date()
       };
 
-      const docRef = await addDoc(collection(db, 'properties'), propertyWithTimestamp);
+      console.log('Attempting to add document to Firestore...');
+      const propertiesCollection = collection(db, 'properties');
+      console.log('Properties collection reference:', propertiesCollection);
+      
+      const docRef = await addDoc(propertiesCollection, propertyWithTimestamp);
+      console.log('Document added with ID:', docRef.id);
+
+      // Verify the document was created
       const newDoc = await getDoc(docRef);
+      console.log('Document exists after creation:', newDoc.exists());
+      console.log('Document data:', newDoc.data());
       
       if (newDoc.exists()) {
-        return convertToProperty(newDoc as QueryDocumentSnapshot<DocumentData>);
+        const createdProperty = convertToProperty(newDoc as QueryDocumentSnapshot<DocumentData>);
+        console.log('Successfully created and retrieved property:', createdProperty);
+        return createdProperty;
       }
+      
+      console.error('Document does not exist after creation attempt');
       return null;
     } catch (error) {
-      console.error('Error creating property:', error);
+      console.error('Error in createProperty:', error);
+      if (error instanceof Error) {
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+      }
       return null;
     }
   },

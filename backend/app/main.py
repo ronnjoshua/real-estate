@@ -16,7 +16,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from .routers import properties
-from .api.v1.endpoints import auth  # Import the auth endpoints
+from .api.v1.endpoints import auth, properties as v1_properties  # Import the auth and v1 properties endpoints
 from .core.firebase import initialize_firebase
 import logging
 import time
@@ -100,6 +100,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(properties.router, tags=["properties"])
 # Add auth router
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
+# Add v1 properties router
+app.include_router(v1_properties.router, prefix="/api/v1/properties", tags=["properties"])
 
 @app.get("/")
 async def root():

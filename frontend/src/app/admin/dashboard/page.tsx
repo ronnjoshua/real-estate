@@ -18,7 +18,7 @@ interface Property {
   area: number;
   images: string[];
   property_type: string;
-  status: 'active' | 'pending' | 'sold';
+  status: 'available' | 'pending' | 'sold';
 }
 
 const initialPropertyState: Property = {
@@ -32,7 +32,7 @@ const initialPropertyState: Property = {
   area: 0,
   images: [],
   property_type: '',
-  status: 'active'
+  status: 'available'
 };
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
@@ -70,15 +70,8 @@ export default function AdminDashboard() {
 
   const fetchProperties = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/properties', {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setProperties(data);
-      }
+      const result = await firestoreService.getProperties(100); // Fetch up to 100 properties
+      setProperties(result.properties);
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
@@ -111,33 +104,33 @@ export default function AdminDashboard() {
   const handlePropertySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = isEditing 
-        ? `http://localhost:8000/api/v1/properties/${selectedProperty?.id}`
-        : 'http://localhost:8000/api/v1/properties';
-      
-      const method = isEditing ? 'PUT' : 'POST';
-      const propertyData = isEditing ? selectedProperty : newProperty;
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify(propertyData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save property');
+      if (isEditing && selectedProperty) {
+        const updated = await firestoreService.updateProperty(selectedProperty.id, selectedProperty);
+        if (updated) {
+          await fetchProperties();
+        }
+      } else {
+        // Create a new property without the id field
+        const { id, ...propertyToCreate } = newProperty;
+        console.log('Creating property with data:', propertyToCreate);
+        const created = await firestoreService.createProperty(propertyToCreate);
+        console.log('Property creation result:', created);
+        if (created) {
+          await fetchProperties();
+        } else {
+          console.error('Property creation failed - no result returned');
+        }
       }
-
-      fetchProperties();
       setShowPropertyForm(false);
       setSelectedProperty(null);
       setNewProperty(initialPropertyState);
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving property:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', error.message);
+        console.error('Error stack:', error.stack);
+      }
     }
   };
 
@@ -145,18 +138,10 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this property?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/properties/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete property');
+      const success = await firestoreService.deleteProperty(id);
+      if (success) {
+        await fetchProperties();
       }
-
-      fetchProperties();
     } catch (error) {
       console.error('Error deleting property:', error);
     }
@@ -312,13 +297,13 @@ export default function AdminDashboard() {
                       <select
                         value={isEditing ? selectedProperty?.status : newProperty.status}
                         onChange={(e) => isEditing
-                          ? setSelectedProperty({ ...selectedProperty!, status: e.target.value as 'active' | 'pending' | 'sold' })
-                          : setNewProperty({ ...newProperty, status: e.target.value as 'active' | 'pending' | 'sold' })
+                          ? setSelectedProperty({ ...selectedProperty!, status: e.target.value as 'available' | 'pending' | 'sold' })
+                          : setNewProperty({ ...newProperty, status: e.target.value as 'available' | 'pending' | 'sold' })
                         }
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required
                       >
-                        <option value="active">Active</option>
+                        <option value="available">Available</option>
                         <option value="pending">Pending</option>
                         <option value="sold">Sold</option>
                       </select>
@@ -350,7 +335,6 @@ export default function AdminDashboard() {
                       rows={3}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                       placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                      required
                     />
                   </div>
                   <div className="flex justify-end space-x-3">
@@ -415,7 +399,7 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          property.status === 'active' ? 'bg-green-100 text-green-800' :
+                          property.status === 'available' ? 'bg-green-100 text-green-800' :
                           property.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
                         }`}>

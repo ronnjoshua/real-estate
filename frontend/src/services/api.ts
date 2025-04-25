@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
 // Interface for Property
 export interface Property {
@@ -50,14 +50,14 @@ export async function fetchPropertyById(id: string): Promise<Property> {
 }
 
 // Function to create a new property
-export async function createProperty(propertyData: Omit<Property, 'id'>): Promise<Property> {
+export async function createProperty(property: Omit<Property, 'id'>): Promise<Property> {
   try {
     const response = await fetch(`${API_BASE_URL}/properties`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(propertyData),
+      body: JSON.stringify(property),
     });
     return handleResponse<Property>(response);
   } catch (error) {
@@ -67,14 +67,14 @@ export async function createProperty(propertyData: Omit<Property, 'id'>): Promis
 }
 
 // Function to update a property
-export async function updateProperty(id: string, propertyData: Partial<Property>): Promise<Property> {
+export async function updateProperty(id: string, property: Partial<Property>): Promise<Property> {
   try {
     const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(propertyData),
+      body: JSON.stringify(property),
     });
     return handleResponse<Property>(response);
   } catch (error) {
@@ -89,7 +89,7 @@ export async function deleteProperty(id: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/properties/${id}`, {
       method: 'DELETE',
     });
-    await handleResponse<{ message: string }>(response);
+    return handleResponse<void>(response);
   } catch (error) {
     console.error('Error deleting property:', error);
     throw error;
