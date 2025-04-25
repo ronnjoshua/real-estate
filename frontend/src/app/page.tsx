@@ -49,7 +49,6 @@ export default function HomePage() {
           priority
           className="brightness-[0.85]"
         />
-        test
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-transparent to-blue-900/50">
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent">
             <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
