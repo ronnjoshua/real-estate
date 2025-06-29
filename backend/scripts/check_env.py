@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script to check if the .env file is properly configured with all required
-Firebase credentials.
+environment variables for the real estate application.
 """
 
 import os
@@ -17,24 +17,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Required Firebase environment variables
-REQUIRED_FIREBASE_VARS = [
-    "FIREBASE_TYPE",
-    "FIREBASE_PROJECT_ID",
-    "FIREBASE_PRIVATE_KEY_ID",
-    "FIREBASE_PRIVATE_KEY",
-    "FIREBASE_CLIENT_EMAIL",
-    "FIREBASE_CLIENT_ID",
-    "FIREBASE_AUTH_URI",
-    "FIREBASE_TOKEN_URI",
-    "FIREBASE_AUTH_PROVIDER_X509_CERT_URL",
-    "FIREBASE_CLIENT_X509_CERT_URL",
+# Required environment variables
+REQUIRED_ENV_VARS = [
+    "SECRET_KEY",
 ]
 
 # Optional environment variables (not required but checked if present)
 OPTIONAL_ENV_VARS = [
+    "ENVIRONMENT",
+    "DEBUG",
+    "ALGORITHM", 
+    "ACCESS_TOKEN_EXPIRE_MINUTES",
+    "REFRESH_TOKEN_EXPIRE_DAYS",
     "ALLOWED_ORIGINS",
-    "USE_MOCK_FIREBASE",
+    "DATABASE_URL",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASSWORD",
+    "MAX_FILE_SIZE",
+    "ALLOWED_FILE_TYPES",
+    "UPLOAD_FOLDER",
+    "REDIS_URL",
+    "RATE_LIMIT_REQUESTS",
+    "RATE_LIMIT_WINDOW",
 ]
 
 def check_env_file(env_path=None):
@@ -70,7 +76,7 @@ def check_env_file(env_path=None):
     missing_vars = []
     empty_vars = []
     
-    for var in REQUIRED_FIREBASE_VARS:
+    for var in REQUIRED_ENV_VARS:
         value = os.getenv(var)
         if value is None:
             missing_vars.append(var)
@@ -137,4 +143,4 @@ def main():
         return 1
 
 if __name__ == "__main__":
-    sys.exit(main()) 
+    sys.exit(main())

@@ -151,6 +151,9 @@ def mark_invitation_as_used(token: str) -> bool:
             return True
     return False
 
+def get_all_invitations() -> List[Invitation]:
+    return list(invitations_db.values())
+
 def create_initial_admin():
     # Check if admin exists
     for user in users_db.values():

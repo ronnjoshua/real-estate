@@ -149,39 +149,6 @@ async def refresh_token(refresh_data: RefreshTokenRequest):
         "expires_in": tokens["expires_in"]
     }
 
-@router.post("/register", response_model=User)
-async def register(user: UserCreate):
-    """Register new user with validation"""
-    
-    # Validate email format
-    if not validate_email(user.email):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid email format"
-        )
-    
-    # Validate password strength
-    if not validate_password_strength(user.password):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must be at least 8 characters long and contain uppercase, lowercase, digit, and special character"
-        )
-    
-    db_user = get_user_by_email(user.email)
-    if db_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-    
-    hashed_password = get_password_hash(user.password)
-    db_user = create_user(
-        email=user.email,
-        full_name=user.full_name,
-        hashed_password=hashed_password,
-        role=user.role
-    )
-    return db_user
 
 @router.get("/me", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
@@ -191,13 +158,21 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @router.post("/invite", response_model=Invitation)
 async def invite_user(invitation: InvitationCreate, _: User = Depends(get_current_admin)):
     token = generate_invitation_token()
+    # Set expiration to 7 days from now if not provided
+    expires_at = invitation.expires_at or datetime.utcnow() + timedelta(days=7)
     db_invitation = create_invitation(
         email=invitation.email,
         role=invitation.role,
         token=token,
-        expires_at=invitation.expires_at
+        expires_at=expires_at
     )
     return db_invitation
+
+@router.get("/invitations", response_model=list)
+async def get_invitations(_: User = Depends(get_current_admin)):
+    """Get all invitations (admin only)"""
+    from app.db.memory_db import get_all_invitations
+    return get_all_invitations()
 
 @router.post("/accept-invitation/{token}", response_model=User)
 async def accept_invitation(token: str, user: UserCreate):

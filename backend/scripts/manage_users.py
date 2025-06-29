@@ -2,13 +2,11 @@
 """
 User Management Script
 
-This script provides utilities to manage users in the system, including:
+This script provides utilities to manage users in the memory database, including:
 - Listing all users
 - Resetting passwords
 - Creating new users
 - Changing user roles
-
-It works with both mock database and Firestore database.
 
 Usage:
   python manage_users.py [command] [options]
@@ -50,279 +48,105 @@ try:
     from app.core.security import get_password_hash, verify_password
     from app.models.user import UserRole, UserInDB, User
     from app.db.memory_db import users_db, get_user_by_email, create_user, update_user
-    from app.core.firebase import get_firebase_app, get_db
     
     logger.info("Successfully imported app modules")
 except ImportError as e:
     logger.error(f"Error importing app modules: {e}")
     sys.exit(1)
 
-def is_using_mock_db():
-    """Check if we're using the mock database."""
-    firebase_app = get_firebase_app()
-    return firebase_app == "mock_app"
-
 def list_users():
     """List all users in the database."""
-    if is_using_mock_db():
-        if not users_db:
-            print("No users found in the database.")
-            return
-        
-        print("\n=== Users in Database (MOCK) ===")
-        print(f"{'Email':<30} {'Full Name':<30} {'Role':<10} {'Created At'}")
-        print("-" * 80)
-        
-        for user_id, user in users_db.items():
-            created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{user.email:<30} {user.full_name:<30} {user.role:<10} {created_at}")
-    else:
-        # Use Firestore
-        firestore_db = get_db()
-        if not firestore_db:
-            print("Firestore database is not available.")
-            return
-        
-        print("\n=== Users in Database (FIRESTORE) ===")
-        print(f"{'Email':<30} {'Full Name':<30} {'Role':<10} {'Created At'}")
-        print("-" * 80)
-        
-        users_collection = firestore_db.collection('users')
-        users = users_collection.get()
-        
-        if not users:
-            print("No users found in the Firestore database.")
-            return
-        
-        for user_doc in users:
-            user_data = user_doc.to_dict()
-            email = user_data.get('email', 'N/A')
-            full_name = user_data.get('full_name', 'N/A')
-            role = user_data.get('role', 'N/A')
-            created_at = user_data.get('created_at', datetime.now())
-            
-            if isinstance(created_at, datetime):
-                created_at_str = created_at.strftime("%Y-%m-%d %H:%M:%S")
-            else:
-                created_at_str = str(created_at)
-            
-            print(f"{email:<30} {full_name:<30} {role:<10} {created_at_str}")
+    if not users_db:
+        print("No users found in the database.")
+        return
+    
+    print("\n=== Users in Database ===")
+    print(f"{'Email':<30} {'Full Name':<30} {'Role':<10} {'Active':<10} {'Created At'}")
+    print("-" * 90)
+    
+    for user_id, user in users_db.items():
+        created_at = user.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        active_status = "Yes" if user.is_active else "No"
+        print(f"{user.email:<30} {user.full_name:<30} {user.role:<10} {active_status:<10} {created_at}")
 
-def reset_password(email, new_password):
+def reset_password(email: str, new_password: str):
     """Reset a user's password."""
-    if is_using_mock_db():
-        user = get_user_by_email(email)
-        if not user:
-            print(f"User with email {email} not found.")
-            return False
-        
-        # Hash the new password
-        hashed_password = get_password_hash(new_password)
-        
-        # Update the user
-        updated_user = update_user(
-            email=email,
-            updates={"hashed_password": hashed_password}
-        )
-        
-        if updated_user:
-            print(f"Password for user {email} has been reset successfully.")
-            return True
-        else:
-            print(f"Failed to reset password for user {email}.")
-            return False
-    else:
-        # Use Firestore
-        firestore_db = get_db()
-        if not firestore_db:
-            print("Firestore database is not available.")
-            return False
-        
-        # Find the user by email
-        users_collection = firestore_db.collection('users')
-        query = users_collection.where('email', '==', email).limit(1)
-        user_docs = query.get()
-        
-        user_doc = next(iter(user_docs), None)
-        if not user_doc:
-            print(f"User with email {email} not found in Firestore.")
-            return False
-        
-        # Hash the new password
-        hashed_password = get_password_hash(new_password)
-        
-        # Update the user document
-        user_doc.reference.update({
-            'hashed_password': hashed_password,
-            'updated_at': datetime.now()
-        })
-        
-        print(f"Password for user {email} has been reset successfully in Firestore.")
-        return True
+    user = get_user_by_email(email)
+    if not user:
+        print(f"User with email '{email}' not found.")
+        return
+    
+    hashed_password = get_password_hash(new_password)
+    update_user(email, {"hashed_password": hashed_password})
+    print(f"Password reset successfully for user '{email}'.")
 
-def create_new_user(email, full_name, password, role):
+def create_new_user(email: str, full_name: str, password: str, role: str):
     """Create a new user."""
-    if is_using_mock_db():
-        # Check if user already exists
-        existing_user = get_user_by_email(email)
-        if existing_user:
-            print(f"User with email {email} already exists.")
-            return False
-        
-        # Hash the password
-        hashed_password = get_password_hash(password)
-        
-        # Validate role
-        try:
-            user_role = UserRole(role.lower())
-        except ValueError:
-            print(f"Invalid role: {role}. Valid roles are: {[r.value for r in UserRole]}")
-            return False
-        
-        # Create the user
-        user = create_user(
-            email=email,
-            full_name=full_name,
-            hashed_password=hashed_password,
-            role=user_role
-        )
-        
-        if user:
-            print(f"User {email} has been created successfully with role {user_role}.")
-            return True
-        else:
-            print(f"Failed to create user {email}.")
-            return False
-    else:
-        # Use Firestore
-        firestore_db = get_db()
-        if not firestore_db:
-            print("Firestore database is not available.")
-            return False
-        
-        # Check if user already exists
-        users_collection = firestore_db.collection('users')
-        query = users_collection.where('email', '==', email).limit(1)
-        existing_user = next(iter(query.get()), None)
-        
-        if existing_user:
-            print(f"User with email {email} already exists in Firestore.")
-            return False
-        
-        # Hash the password
-        hashed_password = get_password_hash(password)
-        
-        # Validate role
-        try:
-            user_role = UserRole(role.lower())
-        except ValueError:
-            print(f"Invalid role: {role}. Valid roles are: {[r.value for r in UserRole]}")
-            return False
-        
-        # Create user document
-        now = datetime.now()
-        user_data = {
-            'id': str(uuid.uuid4()),
-            'email': email,
-            'full_name': full_name,
-            'hashed_password': hashed_password,
-            'role': user_role.value,
-            'is_active': True,
-            'created_at': now,
-            'updated_at': now
-        }
-        
-        # Add to Firestore
-        users_collection.add(user_data)
-        
-        print(f"User {email} has been created successfully in Firestore with role {user_role}.")
-        return True
+    existing_user = get_user_by_email(email)
+    if existing_user:
+        print(f"User with email '{email}' already exists.")
+        return
+    
+    try:
+        user_role = UserRole(role.upper())
+    except ValueError:
+        print(f"Invalid role '{role}'. Valid roles are: {', '.join([r.value for r in UserRole])}")
+        return
+    
+    hashed_password = get_password_hash(password)
+    user = create_user(
+        email=email,
+        full_name=full_name,
+        hashed_password=hashed_password,
+        role=user_role
+    )
+    print(f"User '{email}' created successfully with role '{user_role.value}'.")
 
-def change_user_role(email, role):
+def change_user_role(email: str, new_role: str):
     """Change a user's role."""
-    if is_using_mock_db():
-        user = get_user_by_email(email)
-        if not user:
-            print(f"User with email {email} not found.")
-            return False
-        
-        # Validate role
-        try:
-            user_role = UserRole(role.lower())
-        except ValueError:
-            print(f"Invalid role: {role}. Valid roles are: {[r.value for r in UserRole]}")
-            return False
-        
-        # Update the user
-        updated_user = update_user(
-            email=email,
-            updates={"role": user_role}
-        )
-        
-        if updated_user:
-            print(f"Role for user {email} has been changed to {user_role} successfully.")
-            return True
-        else:
-            print(f"Failed to change role for user {email}.")
-            return False
-    else:
-        # Use Firestore
-        firestore_db = get_db()
-        if not firestore_db:
-            print("Firestore database is not available.")
-            return False
-        
-        # Find the user by email
-        users_collection = firestore_db.collection('users')
-        query = users_collection.where('email', '==', email).limit(1)
-        user_docs = query.get()
-        
-        user_doc = next(iter(user_docs), None)
-        if not user_doc:
-            print(f"User with email {email} not found in Firestore.")
-            return False
-        
-        # Validate role
-        try:
-            user_role = UserRole(role.lower())
-        except ValueError:
-            print(f"Invalid role: {role}. Valid roles are: {[r.value for r in UserRole]}")
-            return False
-        
-        # Update the user document
-        user_doc.reference.update({
-            'role': user_role.value,
-            'updated_at': datetime.now()
-        })
-        
-        print(f"Role for user {email} has been changed to {user_role} successfully in Firestore.")
-        return True
+    user = get_user_by_email(email)
+    if not user:
+        print(f"User with email '{email}' not found.")
+        return
+    
+    try:
+        user_role = UserRole(new_role.upper())
+    except ValueError:
+        print(f"Invalid role '{new_role}'. Valid roles are: {', '.join([r.value for r in UserRole])}")
+        return
+    
+    update_user(email, {"role": user_role})
+    print(f"Role changed successfully for user '{email}' to '{user_role.value}'.")
 
 def main():
     parser = argparse.ArgumentParser(description="User Management Script")
-    subparsers = parser.add_subparsers(dest="command", help="Command to execute")
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
     
-    # List users command
-    list_parser = subparsers.add_parser("list", help="List all users")
+    # List command
+    subparsers.add_parser("list", help="List all users")
     
     # Reset password command
     reset_parser = subparsers.add_parser("reset-password", help="Reset a user's password")
-    reset_parser.add_argument("--email", required=True, help="User's email")
+    reset_parser.add_argument("--email", required=True, help="User email")
     reset_parser.add_argument("--password", required=True, help="New password")
     
     # Create user command
     create_parser = subparsers.add_parser("create", help="Create a new user")
-    create_parser.add_argument("--email", required=True, help="User's email")
-    create_parser.add_argument("--name", required=True, help="User's full name")
-    create_parser.add_argument("--password", required=True, help="User's password")
-    create_parser.add_argument("--role", choices=["admin", "client"], default="client", help="User's role")
+    create_parser.add_argument("--email", required=True, help="User email")
+    create_parser.add_argument("--name", required=True, help="User full name")
+    create_parser.add_argument("--password", required=True, help="User password")
+    create_parser.add_argument("--role", required=True, choices=["admin", "client"], help="User role")
     
     # Change role command
     role_parser = subparsers.add_parser("change-role", help="Change a user's role")
-    role_parser.add_argument("--email", required=True, help="User's email")
-    role_parser.add_argument("--role", choices=["admin", "client"], required=True, help="New role")
+    role_parser.add_argument("--email", required=True, help="User email")
+    role_parser.add_argument("--role", required=True, choices=["admin", "client"], help="New role")
     
     args = parser.parse_args()
+    
+    if not args.command:
+        parser.print_help()
+        return
     
     if args.command == "list":
         list_users()
@@ -332,8 +156,6 @@ def main():
         create_new_user(args.email, args.name, args.password, args.role)
     elif args.command == "change-role":
         change_user_role(args.email, args.role)
-    else:
-        parser.print_help()
 
 if __name__ == "__main__":
-    main() 
+    main()

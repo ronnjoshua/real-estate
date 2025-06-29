@@ -16,7 +16,6 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from .api.v1.endpoints import auth, properties_unified
-from .core.firebase import initialize_firebase
 import logging
 import time
 
@@ -34,13 +33,6 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Initialize Firebase
-logger.info("Initializing Firebase...")
-firebase_app = initialize_firebase()
-if firebase_app == "mock_app":
-    logger.warning("Running with mock Firebase implementation")
-else:
-    logger.info("Firebase initialized successfully")
 
 # Configure CORS
 from .core.config import get_settings
@@ -104,14 +96,9 @@ app.include_router(properties_unified.router, prefix=f"{settings.API_V1_STR}/pro
 @app.get("/")
 async def root():
     logger.info("Health check endpoint accessed")
-    # Print environment variables for debugging (only the names, not values)
-    env_vars = [key for key in os.environ.keys() if key.startswith("FIREBASE_")]
-    logger.info(f"Available Firebase environment variables: {env_vars}")
     
     return {
         "message": "Real Estate API is running",
         "status": "ok",
-        "version": app.version,
-        "firebase_mode": "mock" if firebase_app == "mock_app" else "production",
-        "env_vars_found": len(env_vars)
+        "version": app.version
     } 

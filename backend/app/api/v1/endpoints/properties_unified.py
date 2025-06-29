@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Remove Firestore dependency since we're using memory DB for now
 
 def log_request_info(request: Request):
     """Log information about the incoming request"""
