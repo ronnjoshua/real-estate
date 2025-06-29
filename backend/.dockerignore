@@ -1,0 +1,259 @@
+# Python Backend - .dockerignore
+# ===============================
+# Includes all .gitignore entries plus Docker-specific optimizations
+
+# ===== FROM .gitignore =====
+
+# Python Runtime Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+pipenv/
+.pipenv/
+
+# Python Distribution / Packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit Test / Coverage Reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+.coverage.*
+coverage/
+
+# Environment Variables (Docker handles these differently)
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Flask/FastAPI Specific
+instance/
+.webassets-cache
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Application Logs
+*.log
+logs/
+log/
+server.log
+api.log
+access.log
+error.log
+
+# Application Data
+data/
+uploads/
+media/
+static/files/
+
+# Firebase Service Account
+firebase-credentials.json
+firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Application Specific
+creds
+credentials/
+secrets/
+private_keys/
+
+# Development and Testing
+test_*.py
+*_test.py
+tests/__pycache__/
+.pytest_cache/
+test-results/
+
+# Backup Files
+*.bak
+*.backup
+*.old
+
+# Profiling
+.prof
+
+# Local Development
+local_settings.py
+dev_settings.py
+
+# ===== DOCKER-SPECIFIC EXCLUSIONS =====
+
+# Docker Files (don't copy docker files into image)
+Dockerfile*
+docker-compose*.yml
+docker-compose*.yaml
+.dockerignore
+
+# Git Repository (not needed in container)
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# Development Tools
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-*
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.temp
+
+# Documentation (not needed in production image)
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+*.md
+docs/
+documentation/
+
+# CI/CD Files
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+Jenkinsfile
+azure-pipelines.yml
+
+# Scripts and Development Files
+scripts/manage_users.py
+scripts/test_*.py
+scripts/check_*.py
+run.py
+manage.py
+setup.py
+
+# Testing and Quality Assurance
+tests/
+test/
+.pytest_cache/
+.coverage
+.flake8
+.pylintrc
+mypy.ini
+tox.ini
+.pre-commit-config.yaml
+
+# Package Manager Files (dependencies handled in Dockerfile)
+Pipfile
+Pipfile.lock
+poetry.lock
+pyproject.toml
+requirements-dev.txt
+requirements-test.txt
+
+# Local Development Artifacts
+.venv/
+venv/
+node_modules/
+
+# Temporary Files
+tmp/
+temp/
+*.pid
+
+# Large Files That Shouldn't Be in Container
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Security Scanners
+.bandit
+.safety
+
+# Performance Profiling
+*.prof
+profile/
+
+# Kubernetes/Deployment
+k8s/
+kubernetes/
+helm/
+*.yaml
+*.yml
+
+# Monitoring and Logging (external systems)
+monitoring/
+grafana/
+prometheus/

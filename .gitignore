@@ -1,0 +1,92 @@
+# Real Estate Application - Root .gitignore
+# ==================================================
+
+# OS Generated Files
+# ------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.temp
+
+# IDE and Editor Files
+# --------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-*
+*.sublime-workspace
+*.sublime-project
+
+# System and Development Files
+# -----------------------------
+*.pid
+*.log
+*.out
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation Build Files
+# --------------------------
+docs/_build/
+site/
+
+# Backup Files
+# ------------
+*.bak
+*.orig
+*.backup
+*_backup
+*.old
+
+# Archive Files
+# -------------
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Security and Credentials
+# -------------------------
+*.key
+*.pem
+*.p12
+*.pfx
+credentials/
+secrets/
+private/
+
+# Temporary and Cache Directories
+# --------------------------------
+tmp/
+temp/
+cache/
+.cache/
+
+# Coverage and Test Reports
+# -------------------------
+coverage/
+*.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Build and Distribution
+# ----------------------
+dist/
+build/
+*.egg-info/
+
+# Git specific
+# ------------
+.git/
+.gitignore_global

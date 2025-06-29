@@ -10,13 +10,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="relative h-48">
         <img
-          src={property.images[0] || '/placeholder.jpg'}
+          src={property.media.images[0] || '/placeholder.jpg'}
           alt={property.title}
           className="w-full h-full object-cover"
         />
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-1 rounded-full text-xs ${
-            property.status === 'active'
+            property.status === 'available'
               ? 'bg-green-100 text-green-800'
               : property.status === 'sold'
               ? 'bg-red-100 text-red-800'
@@ -29,7 +29,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2">{property.title}</h3>
-        <p className="text-gray-600 mb-2">{property.location}</p>
+        <p className="text-gray-600 mb-2">{property.location.city}, {property.location.state}</p>
         <div className="flex justify-between items-center mb-4">
           <span className="text-2xl font-bold text-blue-600">
             ${property.price.toLocaleString()}

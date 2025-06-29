@@ -6,36 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { UserRole } from '@/types/user';
 import Image from 'next/image';
-import { firestoreService } from '@/services/firebase';
-import { Property } from '@/types/property';
-
-interface Property {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
-  images: string[];
-  property_type: string;
-  status: 'active' | 'pending' | 'sold';
-}
-
-const initialPropertyState: Property = {
-  id: '',
-  title: '',
-  description: '',
-  price: 0,
-  location: '',
-  bedrooms: 0,
-  bathrooms: 0,
-  area: 0,
-  images: [],
-  property_type: '',
-  status: 'active'
-};
+import { apiClient, Property } from '@/services/api';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
 
@@ -59,8 +30,25 @@ export default function AdminPage() {
   });
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [newProperty, setNewProperty] = useState<Property>(initialPropertyState);
   const [showPropertyForm, setShowPropertyForm] = useState(false);
+  
+  // Form state for creating/editing properties
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: 0,
+    address: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    country: 'USA',
+    property_type: 'house' as const,
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 0,
+    status: 'available' as const,
+    images: [] as string[]
+  });
 
   useEffect(() => {
     if (!isAdmin) {
@@ -71,7 +59,7 @@ export default function AdminPage() {
 
   const fetchProperties = async () => {
     try {
-      const result = await firestoreService.getProperties(100); // Fetch up to 100 properties
+      const result = await apiClient.getProperties({ limit: 100 });
       setProperties(result.properties);
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -102,33 +90,72 @@ export default function AdminPage() {
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      price: 0,
+      address: '',
+      city: '',
+      state: '',
+      zip_code: '',
+      country: 'USA',
+      property_type: 'house',
+      bedrooms: 0,
+      bathrooms: 0,
+      area: 0,
+      status: 'available',
+      images: []
+    });
+  };
+
   const handlePropertySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Validate image URLs before saving
-      let validatedImages: string[] = [];
+      const propertyData = {
+        title: formData.title,
+        description: formData.description,
+        price: formData.price,
+        location: {
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zip_code: formData.zip_code,
+          country: formData.country
+        },
+        property_type: formData.property_type,
+        bedrooms: formData.bedrooms,
+        bathrooms: formData.bathrooms,
+        area: formData.area,
+        features: {
+          has_garage: false,
+          has_pool: false,
+          has_garden: false,
+          has_balcony: false,
+          has_basement: false,
+          has_attic: false,
+          is_furnished: false,
+          pet_friendly: false
+        },
+        media: {
+          images: formData.images.filter(url => isValidUrl(url)),
+          documents: []
+        },
+        status: formData.status,
+        agent_id: '',
+        tags: []
+      };
+
       if (isEditing && selectedProperty) {
-        validatedImages = selectedProperty.images.filter(url => isValidUrl(url));
-        const updated = await firestoreService.updateProperty(selectedProperty.id, {
-          ...selectedProperty,
-          images: validatedImages
-        });
-        if (updated) {
-          await fetchProperties();
-        }
+        await apiClient.updateProperty(selectedProperty.id, propertyData);
       } else {
-        validatedImages = newProperty.images.filter(url => isValidUrl(url));
-        const created = await firestoreService.createProperty({
-          ...newProperty,
-          images: validatedImages
-        });
-        if (created) {
-          await fetchProperties();
-        }
+        await apiClient.createProperty(propertyData);
       }
+      
+      await fetchProperties();
       setShowPropertyForm(false);
       setSelectedProperty(null);
-      setNewProperty(initialPropertyState);
+      resetForm();
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving property:', error);
@@ -139,10 +166,8 @@ export default function AdminPage() {
     if (!confirm('Are you sure you want to delete this property?')) return;
 
     try {
-      const success = await firestoreService.deleteProperty(id);
-      if (success) {
-        await fetchProperties();
-      }
+      await apiClient.deleteProperty(id);
+      await fetchProperties();
     } catch (error) {
       console.error('Error deleting property:', error);
     }
@@ -150,6 +175,22 @@ export default function AdminPage() {
 
   const handleEditProperty = (property: Property) => {
     setSelectedProperty(property);
+    setFormData({
+      title: property.title,
+      description: property.description,
+      price: property.price,
+      address: property.location.address,
+      city: property.location.city,
+      state: property.location.state,
+      zip_code: property.location.zip_code,
+      country: property.location.country,
+      property_type: property.property_type,
+      bedrooms: property.bedrooms,
+      bathrooms: property.bathrooms,
+      area: property.area,
+      status: property.status,
+      images: property.media.images
+    });
     setIsEditing(true);
     setShowPropertyForm(true);
   };
@@ -188,7 +229,7 @@ export default function AdminPage() {
                     setShowPropertyForm(true);
                     setIsEditing(false);
                     setSelectedProperty(null);
-                    setNewProperty(initialPropertyState);
+                    resetForm();
                   }}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
@@ -207,24 +248,28 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Title</label>
                         <input
                           type="text"
-                          value={isEditing ? selectedProperty?.title : newProperty.title}
-                          onChange={(e) => isEditing 
-                            ? setSelectedProperty({ ...selectedProperty!, title: e.target.value })
-                            : setNewProperty({ ...newProperty, title: e.target.value })
-                          }
+                          value={formData.title}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Location</label>
+                        <label className="block text-sm font-medium text-gray-700">City</label>
                         <input
                           type="text"
-                          value={isEditing ? selectedProperty?.location : newProperty.location}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, location: e.target.value })
-                            : setNewProperty({ ...newProperty, location: e.target.value })
-                          }
+                          value={formData.city}
+                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">State</label>
+                        <input
+                          type="text"
+                          value={formData.state}
+                          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
@@ -233,37 +278,34 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Price</label>
                         <input
                           type="number"
-                          value={isEditing ? selectedProperty?.price : newProperty.price}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, price: Number(e.target.value) })
-                            : setNewProperty({ ...newProperty, price: Number(e.target.value) })
-                          }
+                          value={formData.price}
+                          onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Property Type</label>
-                        <input
-                          type="text"
-                          value={isEditing ? selectedProperty?.property_type : newProperty.property_type}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, property_type: e.target.value })
-                            : setNewProperty({ ...newProperty, property_type: e.target.value })
-                          }
+                        <select
+                          value={formData.property_type}
+                          onChange={(e) => setFormData({ ...formData, property_type: e.target.value as any })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
-                        />
+                        >
+                          <option value="house">House</option>
+                          <option value="apartment">Apartment</option>
+                          <option value="condo">Condo</option>
+                          <option value="townhouse">Townhouse</option>
+                          <option value="commercial">Commercial</option>
+                          <option value="land">Land</option>
+                        </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Bedrooms</label>
                         <input
                           type="number"
-                          value={isEditing ? selectedProperty?.bedrooms : newProperty.bedrooms}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, bedrooms: Number(e.target.value) })
-                            : setNewProperty({ ...newProperty, bedrooms: Number(e.target.value) })
-                          }
+                          value={formData.bedrooms}
+                          onChange={(e) => setFormData({ ...formData, bedrooms: Number(e.target.value) })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
@@ -272,11 +314,8 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Bathrooms</label>
                         <input
                           type="number"
-                          value={isEditing ? selectedProperty?.bathrooms : newProperty.bathrooms}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, bathrooms: Number(e.target.value) })
-                            : setNewProperty({ ...newProperty, bathrooms: Number(e.target.value) })
-                          }
+                          value={formData.bathrooms}
+                          onChange={(e) => setFormData({ ...formData, bathrooms: Number(e.target.value) })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
@@ -285,11 +324,8 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Area (sqft)</label>
                         <input
                           type="number"
-                          value={isEditing ? selectedProperty?.area : newProperty.area}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, area: Number(e.target.value) })
-                            : setNewProperty({ ...newProperty, area: Number(e.target.value) })
-                          }
+                          value={formData.area}
+                          onChange={(e) => setFormData({ ...formData, area: Number(e.target.value) })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         />
@@ -297,28 +333,34 @@ export default function AdminPage() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Status</label>
                         <select
-                          value={isEditing ? selectedProperty?.status : newProperty.status}
-                          onChange={(e) => isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, status: e.target.value as 'active' | 'pending' | 'sold' })
-                            : setNewProperty({ ...newProperty, status: e.target.value as 'active' | 'pending' | 'sold' })
-                          }
+                          value={formData.status}
+                          onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         >
-                          <option value="active">Active</option>
+                          <option value="available">Available</option>
                           <option value="pending">Pending</option>
                           <option value="sold">Sold</option>
+                          <option value="rented">Rented</option>
+                          <option value="inactive">Inactive</option>
                         </select>
                       </div>
                     </div>
                     <div>
+                      <label className="block text-sm font-medium text-gray-700">Address</label>
+                      <input
+                        type="text"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+                    <div>
                       <label className="block text-sm font-medium text-gray-700">Description</label>
                       <textarea
-                        value={isEditing ? selectedProperty?.description : newProperty.description}
-                        onChange={(e) => isEditing
-                          ? setSelectedProperty({ ...selectedProperty!, description: e.target.value })
-                          : setNewProperty({ ...newProperty, description: e.target.value })
-                        }
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={4}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required
@@ -327,17 +369,14 @@ export default function AdminPage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Image URLs (one per line)</label>
                       <textarea
-                        value={isEditing ? selectedProperty?.images.join('\n') : newProperty.images.join('\n')}
+                        value={formData.images.join('\n')}
                         onChange={(e) => {
                           const urls = e.target.value.split('\n').filter(url => url.trim());
-                          isEditing
-                            ? setSelectedProperty({ ...selectedProperty!, images: urls })
-                            : setNewProperty({ ...newProperty, images: urls });
+                          setFormData({ ...formData, images: urls });
                         }}
                         rows={3}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                        required
                       />
                     </div>
                     <div className="flex justify-end space-x-3">
@@ -347,6 +386,7 @@ export default function AdminPage() {
                           setShowPropertyForm(false);
                           setSelectedProperty(null);
                           setIsEditing(false);
+                          resetForm();
                         }}
                         className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                       >
@@ -379,15 +419,15 @@ export default function AdminPage() {
                     {properties.map((property) => (
                       <tr key={property.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="relative h-60">
+                          <div className="relative h-16 w-16">
                             <Image
-                              src={property.images && property.images.length > 0 && isValidUrl(property.images[0])
-                                ? property.images[0]
+                              src={property.media.images && property.media.images.length > 0 && isValidUrl(property.media.images[0])
+                                ? property.media.images[0]
                                 : PLACEHOLDER_IMAGE}
                               alt={property.title}
                               fill
                               style={{ objectFit: 'cover' }}
-                              className="rounded-t-lg"
+                              className="rounded-md"
                             />
                           </div>
                         </td>
@@ -395,14 +435,14 @@ export default function AdminPage() {
                           <div className="text-sm font-medium text-gray-900">{property.title}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500">{property.location}</div>
+                          <div className="text-sm text-gray-500">{property.location.city}, {property.location.state}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">${property.price.toLocaleString()}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            property.status === 'active' ? 'bg-green-100 text-green-800' :
+                            property.status === 'available' ? 'bg-green-100 text-green-800' :
                             property.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                             'bg-red-100 text-red-800'
                           }`}>
@@ -477,4 +517,4 @@ export default function AdminPage() {
       </div>
     </AdminProtectedRoute>
   );
-} 
+}

@@ -73,6 +73,25 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
+    # Security Configuration
+    SECRET_KEY: str = Field(..., env="SECRET_KEY")
+    ALGORITHM: str = Field(default="HS256", env="ALGORITHM")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
+    REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7, env="REFRESH_TOKEN_EXPIRE_DAYS")
+    
+    # CORS Configuration
+    ALLOWED_ORIGINS: list = Field(
+        default=["http://localhost:3000", "http://127.0.0.1:3000"],
+        env="ALLOWED_ORIGINS"
+    )
+    
+    # Database Configuration
+    DATABASE_URL: str = Field(default="", env="DATABASE_URL")
+    
+    # Environment
+    ENVIRONMENT: str = Field(default="development", env="ENVIRONMENT")
+    DEBUG: bool = Field(default=True, env="DEBUG")
+    
     # Firebase credentials as a dictionary
     FIREBASE_CREDENTIALS: dict = Field(
         default_factory=lambda: {

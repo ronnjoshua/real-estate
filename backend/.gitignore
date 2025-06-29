@@ -1,41 +1,167 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Python Backend - .gitignore
+# ============================
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Python Runtime Files
+# ---------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-# testing
-/coverage
+# Virtual Environments
+# --------------------
+venv/
+env/
+ENV/
+.venv/
+.env/
+virtualenv/
+pipenv/
+.pipenv/
 
-# next.js
-/.next/
-/out/
+# Python Distribution / Packaging
+# --------------------------------
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# production
-/build
+# PyInstaller
+# -----------
+*.manifest
+*.spec
 
-# misc
-.DS_Store
-*.pem
+# Unit Test / Coverage Reports
+# -----------------------------
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+.coverage.*
+coverage/
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# Environment Variables
+# ---------------------
+.env
+.env.*
+!.env.example
+!.env.template
 
-# env files (can opt-in for committing if needed)
-.env*
+# Database Files
+# --------------
+*.db
+*.sqlite
+*.sqlite3
+instance/
 
-# vercel
-.vercel
+# Flask/FastAPI Specific
+# ----------------------
+instance/
+.webassets-cache
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Jupyter Notebook
+# ----------------
+.ipynb_checkpoints
+
+# pyenv
+# -----
+.python-version
+
+# celery beat schedule file
+# -------------------------
+celerybeat-schedule
+
+# SageMath parsed files
+# ---------------------
+*.sage.py
+
+# Spyder project settings
+# -----------------------
+.spyderproject
+.spyproject
+
+# Rope project settings
+# ---------------------
+.ropeproject
+
+# mkdocs documentation
+# --------------------
+/site
+
+# mypy
+# ----
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Application Logs
+# ----------------
+*.log
+logs/
+log/
+server.log
+api.log
+access.log
+error.log
+
+# Application Data
+# ----------------
+data/
+uploads/
+media/
+static/files/
+
+# Firebase Service Account
+# ------------------------
+firebase-credentials.json
+firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Application Specific
+# --------------------
+creds
+credentials/
+secrets/
+private_keys/
+
+# Development and Testing
+# -----------------------
+test_*.py
+*_test.py
+tests/__pycache__/
+.pytest_cache/
+test-results/
+
+# Backup Files
+# ------------
+*.bak
+*.backup
+*.old
+
+# Profiling
+# ---------
+.prof
+
+# Local Development
+# -----------------
+local_settings.py
+dev_settings.py

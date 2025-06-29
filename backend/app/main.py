@@ -15,8 +15,7 @@ else:
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from .routers import properties
-from .api.v1.endpoints import auth, properties as v1_properties  # Import the auth and v1 properties endpoints
+from .api.v1.endpoints import auth, properties_unified
 from .core.firebase import initialize_firebase
 import logging
 import time
@@ -44,7 +43,9 @@ else:
     logger.info("Firebase initialized successfully")
 
 # Configure CORS
-origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+from .core.config import get_settings
+settings = get_settings()
+origins = settings.ALLOWED_ORIGINS if isinstance(settings.ALLOWED_ORIGINS, list) else settings.ALLOWED_ORIGINS.split(",")
 logger.info(f"Configuring CORS with allowed origins: {origins}")
 
 app.add_middleware(
@@ -97,11 +98,8 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # Include routers
-app.include_router(properties.router, tags=["properties"])
-# Add auth router
-app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
-# Add v1 properties router
-app.include_router(v1_properties.router, prefix="/api/v1/properties", tags=["properties"])
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["authentication"])
+app.include_router(properties_unified.router, prefix=f"{settings.API_V1_STR}/properties", tags=["properties"])
 
 @app.get("/")
 async def root():

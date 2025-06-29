@@ -140,8 +140,8 @@ export default function HomePage() {
                 <div key={property.id} className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
                   <div className="relative h-60">
                     <Image
-                      src={property.images && property.images.length > 0 && isValidUrl(property.images[0])
-                        ? property.images[0]
+                      src={property.media.images && property.media.images.length > 0 && isValidUrl(property.media.images[0])
+                        ? property.media.images[0]
                         : PLACEHOLDER_IMAGE}
                       alt={property.title}
                       fill
@@ -161,7 +161,7 @@ export default function HomePage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      {property.location}
+                      {property.location.city}, {property.location.state}
                     </div>
                     <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
                     <div className="space-y-4">

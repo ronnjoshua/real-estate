@@ -70,26 +70,26 @@ export default function PropertyDetailPage() {
   }
 
   const nextImage = () => {
-    if (property.images && property.images.length > 1) {
+    if (property.media.images && property.media.images.length > 1) {
       setCurrentImageIndex((prev) => 
-        prev === property.images.length - 1 ? 0 : prev + 1
+        prev === property.media.images.length - 1 ? 0 : prev + 1
       );
     }
   };
 
   const previousImage = () => {
-    if (property.images && property.images.length > 1) {
+    if (property.media.images && property.media.images.length > 1) {
       setCurrentImageIndex((prev) => 
-        prev === 0 ? property.images.length - 1 : prev - 1
+        prev === 0 ? property.media.images.length - 1 : prev - 1
       );
     }
   };
 
   // Get the current image URL with validation
-  const currentImage = property.images && 
-                      property.images.length > 0 && 
-                      isValidUrl(property.images[currentImageIndex])
-    ? property.images[currentImageIndex]
+  const currentImage = property.media.images && 
+                      property.media.images.length > 0 && 
+                      isValidUrl(property.media.images[currentImageIndex])
+    ? property.media.images[currentImageIndex]
     : PLACEHOLDER_IMAGE;
 
   return (
@@ -104,7 +104,7 @@ export default function PropertyDetailPage() {
               style={{ objectFit: 'cover' }}
               priority
             />
-            {property.images && property.images.length > 1 && (
+            {property.media.images && property.media.images.length > 1 && (
               <div className="absolute inset-0 flex items-center justify-between p-4">
                 <button
                   onClick={previousImage}
@@ -141,7 +141,9 @@ export default function PropertyDetailPage() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{property.title}</h1>
-                <p className="text-xl text-gray-600">{property.location}</p>
+                <p className="text-xl text-gray-600">
+                  {property.location.address}, {property.location.city}, {property.location.state} {property.location.zip_code}
+                </p>
               </div>
               <div className="mt-4 lg:mt-0">
                 <span className="text-3xl font-bold text-blue-600">

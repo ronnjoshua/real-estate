@@ -1,4 +1,4 @@
-#!/Users/ronnjoshuanucup/real-estate/backend/venv/bin/python
+#!/home/anil/Documents/real-estate/backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 # Copyright 2025 Google LLC
 #
