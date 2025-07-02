@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState({
     full_name: '',
@@ -72,7 +72,7 @@ export default function SettingsPage() {
         const error = await response.json();
         setMessage({ type: 'error', content: error.detail || 'Failed to update profile' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', content: 'An error occurred while updating profile' });
     }
   };

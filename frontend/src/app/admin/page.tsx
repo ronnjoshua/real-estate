@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import AdminProtectedRoute from '@/components/AdminProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { UserRole } from '@/types/user';
+// import { UserRole } from '@/types/user';
 import Image from 'next/image';
 import { apiClient, Property } from '@/services/api';
 
@@ -20,14 +20,14 @@ const isValidUrl = (url: string) => {
 };
 
 export default function AdminPage() {
-  const { user, isAdmin, logout } = useAuth();
+  const { isAdmin, logout } = useAuth();
   const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
-  const [invitations, setInvitations] = useState([]);
-  const [newInvitation, setNewInvitation] = useState({
-    email: '',
-    role: UserRole.CLIENT,
-  });
+  // const [invitations, setInvitations] = useState([]);
+  // const [newInvitation, setNewInvitation] = useState({
+  //   email: '',
+  //   role: UserRole.CLIENT,
+  // });
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showPropertyForm, setShowPropertyForm] = useState(false);
@@ -42,11 +42,11 @@ export default function AdminPage() {
     state: '',
     zip_code: '',
     country: 'USA',
-    property_type: 'house' as const,
+    property_type: 'house' as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land',
     bedrooms: 0,
     bathrooms: 0,
     area: 0,
-    status: 'available' as const,
+    status: 'available' as 'available' | 'sold' | 'rented' | 'pending' | 'inactive',
     images: [] as string[]
   });
 
@@ -66,29 +66,30 @@ export default function AdminPage() {
     }
   };
 
-  const handleCreateInvitation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/invite', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify(newInvitation),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create invitation');
-      }
-
-      const data = await response.json();
-      setInvitations([...invitations, data]);
-      setNewInvitation({ email: '', role: UserRole.CLIENT });
-    } catch (error) {
-      console.error('Error creating invitation:', error);
-    }
-  };
+  // Unused function - commented out to fix ESLint error
+  // const handleCreateInvitation = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch('http://localhost:8000/api/v1/auth/invite', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${user?.token}`,
+  //       },
+  //       body: JSON.stringify(newInvitation),
+  //     });
+  //
+  //     if (!response.ok) {
+  //       throw new Error('Failed to create invitation');
+  //     }
+  //
+  //     const data = await response.json();
+  //     setInvitations([...invitations, data]);
+  //     setNewInvitation({ email: '', role: UserRole.CLIENT });
+  //   } catch (error) {
+  //     console.error('Error creating invitation:', error);
+  //   }
+  // };
 
   const resetForm = () => {
     setFormData({
@@ -288,7 +289,7 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Property Type</label>
                         <select
                           value={formData.property_type}
-                          onChange={(e) => setFormData({ ...formData, property_type: e.target.value as any })}
+                          onChange={(e) => setFormData({ ...formData, property_type: e.target.value as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land' })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         >
@@ -334,7 +335,7 @@ export default function AdminPage() {
                         <label className="block text-sm font-medium text-gray-700">Status</label>
                         <select
                           value={formData.status}
-                          onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                          onChange={(e) => setFormData({ ...formData, status: e.target.value as 'available' | 'sold' | 'rented' | 'pending' | 'inactive' })}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           required
                         >
@@ -470,7 +471,8 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Invitations Section */}
+            {/* Invitations Section - Commented out for deployment */}
+            {/*
             <div className="mt-8 bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Active Invitations</h2>
               <div className="overflow-x-auto">
@@ -512,6 +514,7 @@ export default function AdminPage() {
                 </table>
               </div>
             </div>
+            */}
           </div>
         </main>
       </div>

@@ -1,9 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { UserRole } from '@/types/user';
+
+interface Invitation {
+  id: string;
+  email: string;
+  role: UserRole;
+  status: string;
+  created_at: string;
+  is_used: boolean;
+}
 import Image from 'next/image';
 import { apiClient, Property } from '@/services/api';
 
@@ -22,7 +31,7 @@ export default function AdminDashboard() {
   const { user, isAdmin, logout } = useAuth();
   const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
-  const [invitations, setInvitations] = useState([]);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [newInvitation, setNewInvitation] = useState({
     email: '',
     role: UserRole.CLIENT,
@@ -41,32 +50,24 @@ export default function AdminDashboard() {
     state: '',
     zip_code: '',
     country: 'USA',
-    property_type: 'house' as const,
+    property_type: 'house' as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land',
     bedrooms: 0,
     bathrooms: 0,
     area: 0,
-    status: 'available' as const,
+    status: 'available' as 'available' | 'sold' | 'rented' | 'pending' | 'inactive',
     images: [] as string[]
   });
 
-  useEffect(() => {
-    if (!isAdmin) {
-      router.push('/login');
-    }
-    fetchProperties();
-    fetchInvitations();
-  }, [isAdmin, router]);
-
-  const fetchProperties = async () => {
+  const fetchProperties = useCallback(async () => {
     try {
       const result = await apiClient.getProperties({ limit: 100 });
       setProperties(result.properties);
     } catch (error) {
       console.error('Error fetching properties:', error);
     }
-  };
+  }, []);
 
-  const fetchInvitations = async () => {
+  const fetchInvitations = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8000/api/v1/auth/invitations', {
         headers: {
@@ -80,7 +81,15 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error fetching invitations:', error);
     }
-  };
+  }, [user?.token]);
+
+  useEffect(() => {
+    if (!isAdmin) {
+      router.push('/login');
+    }
+    fetchProperties();
+    fetchInvitations();
+  }, [isAdmin, router, fetchProperties, fetchInvitations]);
 
   const handleCreateInvitation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,7 +311,7 @@ export default function AdminDashboard() {
                       <label className="block text-sm font-medium text-gray-700">Property Type</label>
                       <select
                         value={formData.property_type}
-                        onChange={(e) => setFormData({ ...formData, property_type: e.target.value as any })}
+                        onChange={(e) => setFormData({ ...formData, property_type: e.target.value as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land' })}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required
                       >
@@ -348,7 +357,7 @@ export default function AdminDashboard() {
                       <label className="block text-sm font-medium text-gray-700">Status</label>
                       <select
                         value={formData.status}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value as 'available' | 'sold' | 'rented' | 'pending' | 'inactive' })}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         required
                       >
@@ -547,7 +556,7 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {invitations.map((invitation: any) => (
+                  {invitations.map((invitation: Invitation) => (
                     <tr key={invitation.id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {invitation.email}

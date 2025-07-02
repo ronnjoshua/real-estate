@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Property, PropertyFilters, PropertyResponse, apiClient } from '@/services/api';
@@ -45,7 +45,7 @@ export default function PropertiesPage() {
     return () => clearTimeout(timer);
   }, [inputValue, searchQuery]);
 
-  const loadProperties = async (newFilters?: PropertyFilters, newSkip = 0) => {
+  const loadProperties = useCallback(async (newFilters?: PropertyFilters, newSkip = 0) => {
     try {
       setLoading(true);
       setError('');
@@ -87,12 +87,12 @@ export default function PropertiesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, searchQuery, sortBy, sortOrder, pagination.limit]);
 
   // Load properties when dependencies change
   useEffect(() => {
     loadProperties(filters, 0);
-  }, [filters, searchQuery, sortBy, sortOrder]);
+  }, [filters, searchQuery, sortBy, sortOrder, loadProperties]);
 
   const handleFiltersChange = (newFilters: PropertyFilters) => {
     setFilters(newFilters);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { PropertyFilters as PropertyFiltersType } from '../services/api';
 
 interface PropertyFiltersProps {
@@ -49,11 +49,11 @@ const PropertyFilters = ({ filters, onFiltersChange, onReset }: PropertyFiltersP
     return () => clearTimeout(timer);
   }, [localFilters, onFiltersChange]);
 
-  const updateFilter = (key: keyof PropertyFiltersType, value: any) => {
+  const updateFilter = (key: keyof PropertyFiltersType, value: string | number | boolean | undefined) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
-  const updateLocalFilter = (key: keyof PropertyFiltersType, value: any) => {
+  const updateLocalFilter = (key: keyof PropertyFiltersType, value: string | number | boolean | undefined) => {
     setLocalFilters(prev => ({ ...prev, [key]: value }));
   };
 

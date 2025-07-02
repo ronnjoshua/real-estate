@@ -1,5 +1,6 @@
 import { Property } from '@/types/property';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface PropertyCardProps {
   property: Property;
@@ -9,10 +10,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="relative h-48">
-        <img
+        <Image
           src={property.media.images[0] || '/placeholder.jpg'}
           alt={property.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         <div className="absolute top-2 right-2">
           <span className={`px-2 py-1 rounded-full text-xs ${

@@ -272,8 +272,8 @@ class ApiClient {
     }, true);
   }
 
-  async getPropertyStats(): Promise<any> {
-    return this.makeRequest<any>('/properties/admin/stats', {}, true);
+  async getPropertyStats(): Promise<Record<string, unknown>> {
+    return this.makeRequest<Record<string, unknown>>('/properties/admin/stats', {}, true);
   }
 }
 

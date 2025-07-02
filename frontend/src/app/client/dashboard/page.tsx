@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Property } from '@/services/api';
 import { useRouter } from 'next/navigation';
 
 export default function ClientDashboard() {
@@ -67,11 +68,11 @@ export default function ClientDashboard() {
           <div className="bg-white shadow rounded-lg p-6">
             <h2 className="text-lg font-medium mb-4">Available Properties</h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {properties.map((property: any) => (
+              {properties.map((property: Property) => (
                 <div key={property.id} className="bg-white overflow-hidden shadow rounded-lg">
                   <div className="p-6">
                     <h3 className="text-lg font-medium text-gray-900">{property.title}</h3>
-                    <p className="mt-1 text-sm text-gray-500">{property.location}</p>
+                    <p className="mt-1 text-sm text-gray-500">{property.location.address}</p>
                     <p className="mt-2 text-lg font-semibold text-indigo-600">
                       ${property.price.toLocaleString()}
                     </p>
