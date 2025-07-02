@@ -15,14 +15,14 @@ echo -e "${BLUE}=== Real Estate Application Startup ===${NC}"
 # Check if .env file exists in backend directory
 if [ ! -f "backend/.env" ]; then
     echo -e "${YELLOW}WARNING: No .env file found in backend directory${NC}"
-    echo -e "${YELLOW}Using mock Firebase implementation by default${NC}"
+    echo -e "${YELLOW}Creating minimal .env file for development${NC}"
     
     # Create minimal .env file for backend
-    echo "USE_MOCK_FIREBASE=true" > backend/.env
+    echo "SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe(64))')" > backend/.env
     echo "API_HOST=127.0.0.1" >> backend/.env
     echo "API_PORT=8000" >> backend/.env
     echo "API_RELOAD=true" >> backend/.env
-    echo "ALLOWED_ORIGINS=*" >> backend/.env
+    echo "ALLOWED_ORIGINS=[\"http://localhost:3000\"]" >> backend/.env
     
     echo -e "${YELLOW}Created minimal .env file for development${NC}"
 fi

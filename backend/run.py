@@ -39,15 +39,7 @@ def load_environment(env_file=None):
         read_env_file(env_file)
         
         # Check if essential environment variables are loaded
-        firebase_vars = [
-            "FIREBASE_TYPE",
-            "FIREBASE_PROJECT_ID"
-        ]
-        missing = [var for var in firebase_vars if not os.environ.get(var)]
-        if missing:
-            logger.warning(f"Missing essential Firebase variables: {', '.join(missing)}")
-        else:
-            logger.info("Essential Firebase environment variables are loaded")
+        logger.info("Environment variables loaded successfully")
         
         return True
     else:
@@ -148,17 +140,12 @@ def main():
     if args.debug_env:
         logger.info("Environment variables debug:")
         for key in sorted(os.environ.keys()):
-            if key.startswith("FIREBASE_"):
-                if key == "FIREBASE_PRIVATE_KEY":
-                    logger.info(f"  {key}: [PRIVATE KEY PRESENT]")
-                else:
-                    value = os.environ.get(key, "")
-                    logger.info(f"  {key}: {value[:10]}..." if value else f"  {key}: empty")
+            if key.startswith(("API_", "SECRET_", "ALLOWED_")):
+                value = os.environ.get(key, "")
+                logger.info(f"  {key}: {value[:10]}..." if value else f"  {key}: empty")
     
     # Run the server
-    use_mock = os.environ.get("USE_MOCK_FIREBASE", "").lower() in ("true", "1", "yes")
-    if use_mock:
-        logger.info("Running with mock Firebase implementation (USE_MOCK_FIREBASE=true)")
+    logger.info("Starting server with in-memory authentication")
     
     return run_server(
         host=args.host,

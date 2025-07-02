@@ -5,7 +5,6 @@
 ### Prerequisites
 - Node.js 18+ 
 - Python 3.11+
-- Firebase account (optional for full features)
 
 ### Backend Setup
 
@@ -101,14 +100,6 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 # CORS
 ALLOWED_ORIGINS=["https://yourdomain.com","https://www.yourdomain.com"]
 
-# Firebase (REQUIRED for production)
-FIREBASE_TYPE=service_account
-FIREBASE_PROJECT_ID=your-firebase-project
-FIREBASE_PRIVATE_KEY_ID=your-private-key-id
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----"
-FIREBASE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
-FIREBASE_CLIENT_ID=your-client-id
-
 # Optional
 REDIS_URL=redis://localhost:6379/0
 RATE_LIMIT_REQUESTS=100
@@ -162,7 +153,7 @@ services:
       - "8000:8000"
     environment:
       - SECRET_KEY=${SECRET_KEY}
-      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
     volumes:
       - ./backend:/app
     restart: unless-stopped
@@ -189,17 +180,17 @@ services:
 #### 1. Vercel + Railway
 - **Frontend**: Deploy to Vercel (automatic from GitHub)
 - **Backend**: Deploy to Railway with environment variables
-- **Database**: Firebase Firestore (managed)
+- **Database**: In-memory (for development) or external DB
 
 #### 2. AWS
 - **Frontend**: S3 + CloudFront
 - **Backend**: ECS or Lambda
-- **Database**: Firestore or DynamoDB
+- **Database**: In-memory or external DB
 
 #### 3. Google Cloud Platform
 - **Frontend**: Cloud Storage + CDN
 - **Backend**: Cloud Run
-- **Database**: Firestore (native)
+- **Database**: In-memory or external DB
 
 ## 🔧 API Documentation
 
