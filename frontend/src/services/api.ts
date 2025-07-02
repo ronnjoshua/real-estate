@@ -1,6 +1,10 @@
 // API base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
+// Debug logging
+console.log('Environment variable NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('Final API_BASE_URL being used:', API_BASE_URL);
+
 // Token storage utilities
 const TOKEN_KEY = 'auth_tokens';
 
