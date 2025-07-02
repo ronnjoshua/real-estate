@@ -172,6 +172,9 @@ class ApiClient {
     }
 
     const url = endpoint.startsWith('http') ? endpoint : `${this.baseURL}${endpoint}`;
+    console.log('Making request to URL:', url);
+    console.log('this.baseURL:', this.baseURL);
+    console.log('endpoint:', endpoint);
     let response = await fetch(url, options);
 
     // If unauthorized and we have tokens, try to refresh
