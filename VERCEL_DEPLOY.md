@@ -6,11 +6,14 @@
 1. Push your code to GitHub
 2. Go to [vercel.com](https://vercel.com) and sign up with GitHub
 3. Click "Import Project" and select your repository
-4. Set these environment variables in Vercel dashboard:
+4. **IMPORTANT**: In project settings, set Root Directory to `frontend`
+   - This tells Vercel to look for package.json in the frontend folder
+   - Vercel will auto-detect Next.js from the package.json dependencies
+5. Set these environment variables in Vercel dashboard:
    ```
    NEXT_PUBLIC_API_URL=https://your-backend-url.railway.app/api/v1
    ```
-5. Deploy!
+6. Deploy!
 
 ### 2. Backend (Railway - Free Tier)
 1. Go to [railway.app](https://railway.app) and sign up with GitHub
