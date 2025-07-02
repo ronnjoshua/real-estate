@@ -38,15 +38,29 @@ app = FastAPI(
 from .core.config import get_settings
 settings = get_settings()
 
-# Temporary fix - allow all origins for testing
-origins = ["*"]
-logger.info(f"Configuring CORS with allowed origins: {origins}")
+# Get allowed origins from settings
+try:
+    origins = settings.get_allowed_origins()
+    logger.info(f"Configuring CORS with allowed origins: {origins}")
+    
+    # Check if we're using wildcard with credentials (not allowed)
+    allow_credentials = True
+    if "*" in origins:
+        logger.warning("Using wildcard origin '*' - disabling credentials for security")
+        allow_credentials = False
+        
+except Exception as e:
+    logger.error(f"Error getting allowed origins: {e}")
+    # Fallback to allow all origins for now
+    origins = ["*"]
+    allow_credentials = False
+    logger.warning("Using fallback CORS policy: allow all origins, no credentials")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_credentials=allow_credentials,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 

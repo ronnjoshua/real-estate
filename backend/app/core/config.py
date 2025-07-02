@@ -65,10 +65,23 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7, env="REFRESH_TOKEN_EXPIRE_DAYS")
     
     # CORS Configuration
-    ALLOWED_ORIGINS: list = Field(
-        default=["http://localhost:3000", "http://127.0.0.1:3000"],
+    ALLOWED_ORIGINS: str = Field(
+        default="http://localhost:3000,http://127.0.0.1:3000",
         env="ALLOWED_ORIGINS"
     )
+    
+    def get_allowed_origins(self) -> list[str]:
+        """Parse ALLOWED_ORIGINS environment variable into a list."""
+        import json
+        try:
+            # Try to parse as JSON array first (Railway format)
+            if self.ALLOWED_ORIGINS.startswith('['):
+                return json.loads(self.ALLOWED_ORIGINS)
+            # Otherwise treat as comma-separated string
+            return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+        except (json.JSONDecodeError, AttributeError):
+            # Fallback to splitting by comma
+            return [origin.strip() for origin in str(self.ALLOWED_ORIGINS).split(",") if origin.strip()]
     
     # Database Configuration
     DATABASE_URL: str = Field(default="", env="DATABASE_URL")
