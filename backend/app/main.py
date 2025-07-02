@@ -48,18 +48,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Security middleware to force HTTPS
+# Security headers middleware
 @app.middleware("http") 
-async def force_https(request: Request, call_next):
-    # Redirect HTTP to HTTPS
-    if request.headers.get("x-forwarded-proto") == "http":
-        https_url = str(request.url).replace("http://", "https://", 1)
-        return JSONResponse(
-            status_code=301,
-            content={"detail": "Redirecting to HTTPS"},
-            headers={"Location": https_url}
-        )
-    
+async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["X-Content-Type-Options"] = "nosniff"
