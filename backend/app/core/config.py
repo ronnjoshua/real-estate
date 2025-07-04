@@ -13,13 +13,19 @@ def read_env_file(file_path=None):
     Read environment variables directly from .env file.
     This is a simpler approach than using python-dotenv, 
     and may work better with complex values like private keys.
+    Only loads .env file in development/local environments.
     """
+    # Skip loading .env file in production environments like Railway
+    if os.getenv('RAILWAY_ENVIRONMENT') or os.getenv('ENVIRONMENT') == 'production':
+        logger.info("Production environment detected - skipping .env file loading")
+        return
+        
     if file_path is None:
         backend_dir = Path(__file__).parent.parent.parent
         file_path = backend_dir / '.env'
     
     if not Path(file_path).exists():
-        logger.warning(f"Cannot find .env file at {file_path}")
+        logger.info(f"No .env file found at {file_path} - using environment variables")
         return
         
     logger.info(f"Reading environment variables from {file_path}")
@@ -49,7 +55,7 @@ def read_env_file(file_path=None):
     except Exception as e:
         logger.error(f"Error reading .env file: {e}")
 
-# Read environment variables from .env file
+# Read environment variables from .env file (only in development)
 read_env_file()
 
 
