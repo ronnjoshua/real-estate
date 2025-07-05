@@ -65,7 +65,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     
     # Security Configuration
-    SECRET_KEY: str = Field(..., env="SECRET_KEY")
+    SECRET_KEY: str = Field(default="fallback-secret-key-change-in-production", env="SECRET_KEY")
     ALGORITHM: str = Field(default="HS256", env="ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
     REFRESH_TOKEN_EXPIRE_DAYS: int = Field(default=7, env="REFRESH_TOKEN_EXPIRE_DAYS")
