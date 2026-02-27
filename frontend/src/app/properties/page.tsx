@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Property, PropertyFilters, PropertyResponse, apiClient } from '@/services/api';
+import { Property, PropertyFilters, apiClient } from '@/services/api';
 import PropertyFiltersComponent from '@/components/PropertyFilters';
+import { useLunrSearch } from '@/hooks/useLunrSearch';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
 
@@ -18,109 +19,114 @@ const isValidUrl = (url: string) => {
 };
 
 export default function PropertiesPage() {
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState<PropertyFilters>({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [inputValue, setInputValue] = useState('');
-  const [pagination, setPagination] = useState({
-    skip: 0,
-    limit: 12,
-    total: 0,
-    hasMore: false
-  });
   const [sortBy, setSortBy] = useState('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  // Debounced search effect
+  // Use Lunr.js for client-side search
+  const { searchQuery, setSearchQuery, filteredProperties: searchedProperties, isSearching } = useLunrSearch(allProperties);
+
+  // Load all properties once on mount
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== searchQuery) {
-        setSearchQuery(inputValue);
-        setPagination(prev => ({ ...prev, skip: 0 }));
+    const loadAllProperties = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const response = await apiClient.getProperties({ limit: 1000 });
+        setAllProperties(response.properties);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load properties');
+      } finally {
+        setLoading(false);
       }
-    }, 500); // 500ms delay
+    };
+    loadAllProperties();
+  }, []);
 
-    return () => clearTimeout(timer);
-  }, [inputValue, searchQuery]);
+  // Apply filters client-side
+  const filteredProperties = useMemo(() => {
+    let result = searchedProperties;
 
-  const loadProperties = useCallback(async (newFilters?: PropertyFilters, newSkip = 0) => {
-    try {
-      setLoading(true);
-      setError('');
-
-      let response: PropertyResponse;
-
-      if (searchQuery.trim()) {
-        // Use search endpoint
-        response = await apiClient.searchProperties(searchQuery, {
-          skip: newSkip,
-          limit: pagination.limit
-        });
-      } else {
-        // Use filtered listing endpoint
-        response = await apiClient.getProperties({
-          skip: newSkip,
-          limit: pagination.limit,
-          filters: newFilters || filters,
-          sort_by: sortBy,
-          sort_order: sortOrder
-        });
-      }
-
-      if (newSkip === 0) {
-        setProperties(response.properties);
-      } else {
-        setProperties(prev => [...prev, ...response.properties]);
-      }
-
-      setPagination({
-        skip: response.skip,
-        limit: response.limit,
-        total: response.total,
-        hasMore: response.has_more
-      });
-
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load properties');
-    } finally {
-      setLoading(false);
+    // Apply filters
+    if (filters.property_type) {
+      result = result.filter(p => p.property_type === filters.property_type);
     }
-  }, [filters, searchQuery, sortBy, sortOrder, pagination.limit]);
+    if (filters.status) {
+      result = result.filter(p => p.status === filters.status);
+    }
+    if (filters.min_price !== undefined) {
+      result = result.filter(p => p.price >= filters.min_price!);
+    }
+    if (filters.max_price !== undefined) {
+      result = result.filter(p => p.price <= filters.max_price!);
+    }
+    if (filters.min_bedrooms !== undefined) {
+      result = result.filter(p => p.bedrooms >= filters.min_bedrooms!);
+    }
+    if (filters.max_bedrooms !== undefined) {
+      result = result.filter(p => p.bedrooms <= filters.max_bedrooms!);
+    }
+    if (filters.min_bathrooms !== undefined) {
+      result = result.filter(p => p.bathrooms >= filters.min_bathrooms!);
+    }
+    if (filters.max_bathrooms !== undefined) {
+      result = result.filter(p => p.bathrooms <= filters.max_bathrooms!);
+    }
+    if (filters.city) {
+      result = result.filter(p => p.location?.city?.toLowerCase().includes(filters.city!.toLowerCase()));
+    }
+    if (filters.has_garage) {
+      result = result.filter(p => p.features?.has_garage);
+    }
+    if (filters.has_pool) {
+      result = result.filter(p => p.features?.has_pool);
+    }
+    if (filters.has_garden) {
+      result = result.filter(p => p.features?.has_garden);
+    }
+    if (filters.pet_friendly) {
+      result = result.filter(p => p.features?.pet_friendly);
+    }
 
-  // Load properties when dependencies change
-  useEffect(() => {
-    loadProperties(filters, 0);
-  }, [filters, searchQuery, sortBy, sortOrder, loadProperties]);
+    // Apply sorting
+    result = [...result].sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case 'price':
+          comparison = a.price - b.price;
+          break;
+        case 'bedrooms':
+          comparison = a.bedrooms - b.bedrooms;
+          break;
+        case 'area':
+          comparison = a.area - b.area;
+          break;
+        case 'created_at':
+        default:
+          comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          break;
+      }
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return result;
+  }, [searchedProperties, filters, sortBy, sortOrder]);
 
   const handleFiltersChange = (newFilters: PropertyFilters) => {
     setFilters(newFilters);
-    setPagination(prev => ({ ...prev, skip: 0 }));
   };
 
   const handleFiltersReset = () => {
     setFilters({});
     setSearchQuery('');
-    setInputValue('');
-    setPagination(prev => ({ ...prev, skip: 0 }));
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setInputValue(query);
-    setPagination(prev => ({ ...prev, skip: 0 }));
-  };
-
-  const handleLoadMore = () => {
-    const newSkip = pagination.skip + pagination.limit;
-    loadProperties(filters, newSkip);
   };
 
   const handleSortChange = (newSortBy: string, newSortOrder: 'asc' | 'desc') => {
     setSortBy(newSortBy);
     setSortOrder(newSortOrder);
-    setPagination(prev => ({ ...prev, skip: 0 }));
   };
 
   if (loading) {
@@ -170,15 +176,14 @@ export default function PropertiesPage() {
           </p>
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar - Instant search with Lunr.js */}
         <div className="mb-8">
           <div className="max-w-2xl mx-auto">
             <div className="relative">
               <input
                 type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch(inputValue)}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search properties by title, description, or location..."
                 className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -187,15 +192,17 @@ export default function PropertiesPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <button
-                onClick={() => handleSearch(inputValue)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-              >
-                <span className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
-                  Search
-                </span>
-              </button>
+              {isSearching && (
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
+                </div>
+              )}
             </div>
+            {searchQuery && (
+              <p className="text-sm text-gray-500 mt-2 text-center">
+                Found {filteredProperties.length} result{filteredProperties.length !== 1 ? 's' : ''} for &quot;{searchQuery}&quot;
+              </p>
+            )}
           </div>
         </div>
 
@@ -209,10 +216,10 @@ export default function PropertiesPage() {
         {/* Results Header */}
         <div className="flex flex-wrap justify-between items-center mb-6">
           <div className="text-gray-600">
-            {pagination.total > 0 ? (
+            {filteredProperties.length > 0 ? (
               <>
-                Showing {properties.length} of {pagination.total} properties
-                {Object.keys(filters).length > 0 || searchQuery || inputValue ? ' (filtered)' : ''}
+                Showing {filteredProperties.length} properties
+                {Object.keys(filters).length > 0 || searchQuery ? ' (filtered)' : ''}
               </>
             ) : (
               'No properties found'
@@ -242,7 +249,7 @@ export default function PropertiesPage() {
         </div>
         
         {/* Properties Grid */}
-        {properties.length === 0 && !loading ? (
+        {filteredProperties.length === 0 && !loading ? (
           <div className="text-center py-12">
             <div className="inline-block p-4 rounded-full bg-gray-100 text-gray-400 mb-4">
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,26 +265,11 @@ export default function PropertiesPage() {
             </button>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {properties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
-              ))}
-            </div>
-
-            {/* Load More Button */}
-            {pagination.hasMore && (
-              <div className="text-center mt-12">
-                <button
-                  onClick={handleLoadMore}
-                  disabled={loading}
-                  className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? 'Loading...' : 'Load More Properties'}
-                </button>
-              </div>
-            )}
-          </>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))}
+          </div>
         )}
       </div>
     </div>

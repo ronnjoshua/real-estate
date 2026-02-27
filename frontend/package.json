@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lunr": "^2.3.9",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@types/lunr": "^2.3.7",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.17.30",
