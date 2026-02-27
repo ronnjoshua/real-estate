@@ -15,7 +15,7 @@ else:
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from .api.v1.endpoints import auth, properties_unified
+from .api.v1.endpoints import auth, properties_unified, contact
 import logging
 import time
 
@@ -117,6 +117,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Include routers
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["authentication"])
 app.include_router(properties_unified.router, prefix=f"{settings.API_V1_STR}/properties", tags=["properties"])
+app.include_router(contact.router, prefix=f"{settings.API_V1_STR}/contact", tags=["contact"])
 
 @app.get("/")
 async def root():
