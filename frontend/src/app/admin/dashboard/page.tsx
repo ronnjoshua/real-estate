@@ -21,7 +21,7 @@ const isValidUrl = (url: string) => {
 };
 
 export default function AdminDashboard() {
-  const { user, isAdmin, logout } = useAuth();
+  const { isAdmin, logout } = useAuth();
   const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
