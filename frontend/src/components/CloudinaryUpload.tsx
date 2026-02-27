@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 
 interface CloudinaryUploadProps {
@@ -11,7 +11,7 @@ interface CloudinaryUploadProps {
 
 declare global {
   interface Window {
-    cloudinary: {
+    cloudinary?: {
       createUploadWidget: (
         options: Record<string, unknown>,
         callback: (error: Error | null, result: { event: string; info: { secure_url: string } }) => void
@@ -26,33 +26,18 @@ const UPLOAD_PRESET = 'real_estate_unsigned';
 export default function CloudinaryUpload({ images, onImagesChange, maxImages = 10 }: CloudinaryUploadProps) {
   const [isLoading, setIsLoading] = useState(false);
   const widgetRef = useRef<{ open: () => void; destroy: () => void } | null>(null);
-  const scriptLoadedRef = useRef(false);
-
-  // Use refs to track latest values without triggering re-renders
   const imagesRef = useRef(images);
-  const onImagesChangeRef = useRef(onImagesChange);
-  const maxImagesRef = useRef(maxImages);
 
-  // Update refs when props change
-  useEffect(() => {
-    imagesRef.current = images;
-  }, [images]);
+  // Keep ref updated
+  imagesRef.current = images;
 
-  useEffect(() => {
-    onImagesChangeRef.current = onImagesChange;
-  }, [onImagesChange]);
+  const loadScriptAndOpenWidget = useCallback(() => {
+    const openWidget = () => {
+      if (widgetRef.current) {
+        widgetRef.current.open();
+        return;
+      }
 
-  useEffect(() => {
-    maxImagesRef.current = maxImages;
-  }, [maxImages]);
-
-  useEffect(() => {
-    // Only load script once
-    if (scriptLoadedRef.current) return;
-
-    const existingScript = document.querySelector('script[src="https://widget.cloudinary.com/v2.0/global/all.js"]');
-
-    const initWidget = () => {
       if (!window.cloudinary) return;
 
       widgetRef.current = window.cloudinary.createUploadWidget(
@@ -61,10 +46,10 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
           uploadPreset: UPLOAD_PRESET,
           sources: ['local', 'url', 'camera'],
           multiple: true,
-          maxFiles: 10,
+          maxFiles: maxImages - imagesRef.current.length,
           resourceType: 'image',
           clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-          maxFileSize: 10000000, // 10MB
+          maxFileSize: 10000000,
           folder: 'real-estate',
           cropping: false,
           showPoweredBy: false,
@@ -95,8 +80,7 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
 
           if (result.event === 'success') {
             const newUrl = result.info.secure_url;
-            // Use ref to get latest images array
-            onImagesChangeRef.current([...imagesRef.current, newUrl]);
+            onImagesChange([...imagesRef.current, newUrl]);
           }
 
           if (result.event === 'close') {
@@ -104,50 +88,53 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
           }
         }
       );
-    };
 
-    if (existingScript && window.cloudinary) {
-      scriptLoadedRef.current = true;
-      initWidget();
-    } else if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-      script.async = true;
-      document.body.appendChild(script);
-
-      script.onload = () => {
-        scriptLoadedRef.current = true;
-        initWidget();
-      };
-    }
-
-    return () => {
-      // Cleanup widget on unmount
-      if (widgetRef.current?.destroy) {
-        widgetRef.current.destroy();
-      }
-    };
-  }, []); // Empty dependency array - only run once on mount
-
-  const handleOpenWidget = () => {
-    if (widgetRef.current) {
-      setIsLoading(true);
       widgetRef.current.open();
+    };
+
+    // Check if script already loaded
+    if (window.cloudinary) {
+      openWidget();
+      return;
     }
-  };
 
-  const handleRemoveImage = (indexToRemove: number) => {
+    // Load script
+    const existingScript = document.querySelector('script[src*="cloudinary"]');
+    if (existingScript) {
+      // Wait for it to load
+      const checkInterval = setInterval(() => {
+        if (window.cloudinary) {
+          clearInterval(checkInterval);
+          openWidget();
+        }
+      }, 100);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+    script.async = true;
+    script.onload = openWidget;
+    document.body.appendChild(script);
+  }, [maxImages, onImagesChange]);
+
+  const handleOpenWidget = useCallback(() => {
+    setIsLoading(true);
+    loadScriptAndOpenWidget();
+  }, [loadScriptAndOpenWidget]);
+
+  const handleRemoveImage = useCallback((indexToRemove: number) => {
     onImagesChange(images.filter((_, index) => index !== indexToRemove));
-  };
+  }, [images, onImagesChange]);
 
-  const handleMoveImage = (fromIndex: number, direction: 'up' | 'down') => {
+  const handleMoveImage = useCallback((fromIndex: number, direction: 'up' | 'down') => {
     const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
     if (toIndex < 0 || toIndex >= images.length) return;
 
     const newImages = [...images];
     [newImages[fromIndex], newImages[toIndex]] = [newImages[toIndex], newImages[fromIndex]];
     onImagesChange(newImages);
-  };
+  }, [images, onImagesChange]);
 
   return (
     <div className="space-y-4">
@@ -164,7 +151,7 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
           {isLoading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-              Uploading...
+              Opening...
             </>
           ) : (
             <>
@@ -191,7 +178,7 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {images.map((url, index) => (
-            <div key={index} className="relative group">
+            <div key={`${url}-${index}`} className="relative group">
               <div className="relative h-32 rounded-lg overflow-hidden border border-gray-200">
                 <Image
                   src={url}
@@ -207,7 +194,6 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
                 )}
               </div>
 
-              {/* Controls overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
                 {index > 0 && (
                   <button
@@ -249,7 +235,6 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
             </div>
           ))}
 
-          {/* Add more images button */}
           {images.length < maxImages && (
             <div
               onClick={handleOpenWidget}
