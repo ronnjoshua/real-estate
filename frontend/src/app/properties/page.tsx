@@ -286,10 +286,18 @@ function PropertyCard({ property }: { property: Property }) {
   };
 
   const getLocationString = () => {
+    if (!property.location) {
+      return 'Location not specified';
+    }
     if (typeof property.location === 'string') {
       return property.location;
     }
-    return `${property.location.city}, ${property.location.state}`;
+    const city = property.location.city || '';
+    const state = property.location.state || '';
+    if (city && state) {
+      return `${city}, ${state}`;
+    }
+    return city || state || 'Location not specified';
   };
 
   return (
@@ -303,7 +311,7 @@ function PropertyCard({ property }: { property: Property }) {
         />
         <div className="absolute top-4 right-4">
           <span className="px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full capitalize">
-            {property.property_type}
+            {typeof property.property_type === 'string' ? property.property_type : 'Property'}
           </span>
         </div>
         <div className="absolute top-4 left-4">
@@ -313,28 +321,30 @@ function PropertyCard({ property }: { property: Property }) {
             property.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
             'bg-gray-100 text-gray-800'
           }`}>
-            {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
+            {typeof property.status === 'string' ? property.status.charAt(0).toUpperCase() + property.status.slice(1) : 'Available'}
           </span>
         </div>
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">{property.title}</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          {typeof property.title === 'string' ? property.title : 'Untitled Property'}
+        </h3>
         <p className="text-gray-600 mb-4">{getLocationString()}</p>
         <div className="flex justify-between items-center mb-4">
           <span className="text-2xl font-bold text-blue-600">
-            ${property.price.toLocaleString()}
+            ${typeof property.price === 'number' ? property.price.toLocaleString() : '0'}
           </span>
           <div className="flex gap-2 text-sm text-gray-500">
-            <span>{property.bedrooms} beds</span>
+            <span>{property.bedrooms || 0} beds</span>
             <span>•</span>
-            <span>{property.bathrooms} baths</span>
+            <span>{property.bathrooms || 0} baths</span>
             <span>•</span>
-            <span>{property.area.toLocaleString()} sq ft</span>
+            <span>{typeof property.area === 'number' ? property.area.toLocaleString() : '0'} sq ft</span>
           </div>
         </div>
-        
+
         {/* Property Features */}
-        {property.features && (
+        {property.features && typeof property.features === 'object' && (
           <div className="flex flex-wrap gap-2 mb-4">
             {property.features.has_garage && (
               <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">Garage</span>
@@ -351,7 +361,9 @@ function PropertyCard({ property }: { property: Property }) {
           </div>
         )}
 
-        <p className="text-gray-600 mb-4 line-clamp-2">{property.description}</p>
+        <p className="text-gray-600 mb-4 line-clamp-2">
+          {typeof property.description === 'string' ? property.description : ''}
+        </p>
         <Link
           href={`/properties/${property.id}`}
           className="block w-full bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition-colors"
