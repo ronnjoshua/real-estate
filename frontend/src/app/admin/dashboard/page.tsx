@@ -5,16 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { UserRole } from '@/types/user';
 
-interface Invitation {
-  id: string;
-  email: string;
-  role: UserRole;
-  status: string;
-  created_at: string;
-  is_used: boolean;
-}
 import Image from 'next/image';
-import { apiClient, Property } from '@/services/api';
+import { apiClient, Property, Invitation } from '@/services/api';
 import PropertyForm from '@/components/PropertyForm';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
@@ -52,19 +44,12 @@ export default function AdminDashboard() {
 
   const fetchInvitations = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/invitations', {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setInvitations(data);
-      }
+      const data = await apiClient.getInvitations();
+      setInvitations(data);
     } catch (error) {
       console.error('Error fetching invitations:', error);
     }
-  }, [user?.token]);
+  }, []);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -77,20 +62,8 @@ export default function AdminDashboard() {
   const handleCreateInvitation = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/invite', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify(newInvitation),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create invitation');
-      }
-
-      await fetchInvitations(); // Refresh the invitations list
+      await apiClient.createInvitation(newInvitation);
+      await fetchInvitations();
       setNewInvitation({ email: '', role: UserRole.CLIENT });
     } catch (error) {
       console.error('Error creating invitation:', error);

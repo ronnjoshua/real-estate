@@ -282,6 +282,31 @@ class ApiClient {
   async getPropertyStats(): Promise<Record<string, unknown>> {
     return this.makeRequest<Record<string, unknown>>('/properties/admin/stats', {}, true);
   }
+
+  // Invitation API methods
+  async getInvitations(): Promise<Invitation[]> {
+    return this.makeRequest<Invitation[]>('/auth/invitations', {}, true);
+  }
+
+  async createInvitation(data: { email: string; role: string }): Promise<Invitation> {
+    return this.makeRequest<Invitation>('/auth/invite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }, true);
+  }
+}
+
+// Invitation interface
+export interface Invitation {
+  id: string;
+  email: string;
+  role: string;
+  status?: string;
+  created_at: string;
+  is_used: boolean;
 }
 
 // Create and export API client instance

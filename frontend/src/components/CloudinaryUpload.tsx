@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, memo } from 'react';
 import Image from 'next/image';
 
 interface CloudinaryUploadProps {
@@ -23,7 +23,7 @@ declare global {
 const CLOUD_NAME = 'djf3rir7i';
 const UPLOAD_PRESET = 'real_estate_unsigned';
 
-export default function CloudinaryUpload({ images, onImagesChange, maxImages = 10 }: CloudinaryUploadProps) {
+function CloudinaryUpload({ images, onImagesChange, maxImages = 10 }: CloudinaryUploadProps) {
   const [isLoading, setIsLoading] = useState(false);
   const widgetRef = useRef<{ open: () => void; destroy: () => void } | null>(null);
   const imagesRef = useRef(images);
@@ -251,3 +251,5 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
     </div>
   );
 }
+
+export default memo(CloudinaryUpload);

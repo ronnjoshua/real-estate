@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useCallback, memo } from 'react';
-// CloudinaryUpload temporarily disabled for debugging
-// import CloudinaryUpload from './CloudinaryUpload';
+import CloudinaryUpload from './CloudinaryUpload';
 
 interface PropertyFormData {
   title: string;
@@ -196,21 +195,11 @@ function PropertyForm({ initialData, isEditing, onSubmit, onCancel }: PropertyFo
             required
           />
         </div>
-        {/* Simple image URL input - Cloudinary disabled for debugging */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Image URLs (one per line)</label>
-          <textarea
-            value={formData.images.join('\n')}
-            onChange={(e) => {
-              const urls = e.target.value.split('\n').filter(url => url.trim());
-              handleImagesChange(urls);
-            }}
-            rows={3}
-            placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
-          />
-          <p className="text-xs text-gray-500 mt-1">Enter image URLs, one per line</p>
-        </div>
+        <CloudinaryUpload
+          images={formData.images}
+          onImagesChange={handleImagesChange}
+          maxImages={10}
+        />
         <div className="flex justify-end space-x-3">
           <button
             type="button"
