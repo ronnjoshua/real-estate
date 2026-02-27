@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 
 interface CloudinaryUploadProps {
@@ -15,7 +15,7 @@ declare global {
       createUploadWidget: (
         options: Record<string, unknown>,
         callback: (error: Error | null, result: { event: string; info: { secure_url: string } }) => void
-      ) => { open: () => void };
+      ) => { open: () => void; destroy: () => void };
     };
   }
 }
@@ -25,23 +25,43 @@ const UPLOAD_PRESET = 'real_estate_unsigned';
 
 export default function CloudinaryUpload({ images, onImagesChange, maxImages = 10 }: CloudinaryUploadProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const widgetRef = useRef<{ open: () => void } | null>(null);
+  const widgetRef = useRef<{ open: () => void; destroy: () => void } | null>(null);
+  const scriptLoadedRef = useRef(false);
+
+  // Use refs to track latest values without triggering re-renders
+  const imagesRef = useRef(images);
+  const onImagesChangeRef = useRef(onImagesChange);
+  const maxImagesRef = useRef(maxImages);
+
+  // Update refs when props change
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
 
   useEffect(() => {
-    // Load Cloudinary script
-    const script = document.createElement('script');
-    script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-    script.async = true;
-    document.body.appendChild(script);
+    onImagesChangeRef.current = onImagesChange;
+  }, [onImagesChange]);
 
-    script.onload = () => {
+  useEffect(() => {
+    maxImagesRef.current = maxImages;
+  }, [maxImages]);
+
+  useEffect(() => {
+    // Only load script once
+    if (scriptLoadedRef.current) return;
+
+    const existingScript = document.querySelector('script[src="https://widget.cloudinary.com/v2.0/global/all.js"]');
+
+    const initWidget = () => {
+      if (!window.cloudinary) return;
+
       widgetRef.current = window.cloudinary.createUploadWidget(
         {
           cloudName: CLOUD_NAME,
           uploadPreset: UPLOAD_PRESET,
           sources: ['local', 'url', 'camera'],
           multiple: true,
-          maxFiles: maxImages - images.length,
+          maxFiles: 10,
           resourceType: 'image',
           clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
           maxFileSize: 10000000, // 10MB
@@ -75,7 +95,8 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
 
           if (result.event === 'success') {
             const newUrl = result.info.secure_url;
-            onImagesChange([...images, newUrl]);
+            // Use ref to get latest images array
+            onImagesChangeRef.current([...imagesRef.current, newUrl]);
           }
 
           if (result.event === 'close') {
@@ -85,14 +106,28 @@ export default function CloudinaryUpload({ images, onImagesChange, maxImages = 1
       );
     };
 
+    if (existingScript && window.cloudinary) {
+      scriptLoadedRef.current = true;
+      initWidget();
+    } else if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        scriptLoadedRef.current = true;
+        initWidget();
+      };
+    }
+
     return () => {
-      // Cleanup script if component unmounts
-      const existingScript = document.querySelector('script[src="https://widget.cloudinary.com/v2.0/global/all.js"]');
-      if (existingScript) {
-        // Don't remove the script as it might be used elsewhere
+      // Cleanup widget on unmount
+      if (widgetRef.current?.destroy) {
+        widgetRef.current.destroy();
       }
     };
-  }, [images, maxImages, onImagesChange]);
+  }, []); // Empty dependency array - only run once on mount
 
   const handleOpenWidget = () => {
     if (widgetRef.current) {

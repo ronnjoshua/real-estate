@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { UserRole } from '@/types/user';
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormData({
       title: '',
       description: '',
@@ -132,7 +132,12 @@ export default function AdminDashboard() {
       status: 'available',
       images: []
     });
-  };
+  }, []);
+
+  // Stable callback for image changes to prevent re-renders
+  const handleImagesChange = useCallback((newImages: string[]) => {
+    setFormData(prev => ({ ...prev, images: newImages }));
+  }, []);
 
   const handlePropertySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -392,7 +397,7 @@ export default function AdminDashboard() {
                   </div>
                   <CloudinaryUpload
                     images={formData.images}
-                    onImagesChange={(newImages) => setFormData({ ...formData, images: newImages })}
+                    onImagesChange={handleImagesChange}
                     maxImages={10}
                   />
                   <div className="flex justify-end space-x-3">
