@@ -155,15 +155,22 @@ export default function PropertyDetailPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <span className="block text-gray-500">Bedrooms</span>
-                <span className="text-xl font-semibold text-gray-900">{property.bedrooms}</span>
-              </div>
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <span className="block text-gray-500">Bathrooms</span>
-                <span className="text-xl font-semibold text-gray-900">{property.bathrooms}</span>
-              </div>
+            <div className={`grid gap-4 mb-8 ${
+              property.bedrooms > 0 && property.bathrooms > 0 ? 'grid-cols-3' :
+              property.bedrooms > 0 || property.bathrooms > 0 ? 'grid-cols-2' : 'grid-cols-1'
+            }`}>
+              {property.bedrooms > 0 && (
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <span className="block text-gray-500">Bedrooms</span>
+                  <span className="text-xl font-semibold text-gray-900">{property.bedrooms}</span>
+                </div>
+              )}
+              {property.bathrooms > 0 && (
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <span className="block text-gray-500">Bathrooms</span>
+                  <span className="text-xl font-semibold text-gray-900">{property.bathrooms}</span>
+                </div>
+              )}
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <span className="block text-gray-500">Area</span>
                 <span className="text-xl font-semibold text-gray-900">{property.area.toLocaleString()} sqft</span>

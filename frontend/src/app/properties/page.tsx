@@ -348,10 +348,18 @@ function PropertyCard({ property }: { property: Property }) {
             ${typeof property.price === 'number' ? property.price.toLocaleString() : '0'}
           </span>
           <div className="flex gap-2 text-sm text-gray-500">
-            <span>{property.bedrooms || 0} beds</span>
-            <span>•</span>
-            <span>{property.bathrooms || 0} baths</span>
-            <span>•</span>
+            {property.bedrooms > 0 && (
+              <>
+                <span>{property.bedrooms} beds</span>
+                <span>•</span>
+              </>
+            )}
+            {property.bathrooms > 0 && (
+              <>
+                <span>{property.bathrooms} baths</span>
+                <span>•</span>
+              </>
+            )}
             <span>{typeof property.area === 'number' ? property.area.toLocaleString() : '0'} sq ft</span>
           </div>
         </div>
