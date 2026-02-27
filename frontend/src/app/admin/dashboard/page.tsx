@@ -125,7 +125,7 @@ export default function AdminDashboard() {
           zip_code: formData.zip_code,
           country: formData.country
         },
-        property_type: formData.property_type,
+        property_type: formData.property_type as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land',
         bedrooms: formData.bedrooms,
         bathrooms: formData.bathrooms,
         area: formData.area,
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
           images: formData.images,
           documents: []
         },
-        status: formData.status,
+        status: formData.status as 'available' | 'sold' | 'rented' | 'pending' | 'inactive',
         agent_id: '',
         tags: []
       };
