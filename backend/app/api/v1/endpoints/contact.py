@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, EmailStr
-import resend
 import os
 import logging
 
@@ -8,8 +7,21 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Initialize Resend with API key
-resend.api_key = os.getenv("RESEND_API_KEY", "")
+# Get Resend API key
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+
+# Only import and configure resend if API key is available
+resend = None
+if RESEND_API_KEY:
+    try:
+        import resend as resend_module
+        resend_module.api_key = RESEND_API_KEY
+        resend = resend_module
+        logger.info("Resend configured successfully")
+    except Exception as e:
+        logger.error(f"Failed to configure Resend: {e}")
+else:
+    logger.warning("RESEND_API_KEY not set - email functionality disabled")
 
 # Admin email addresses to receive contact form submissions
 ADMIN_EMAILS = ["ronnnucup1@gmail.com", "ejdizon0618@gmail.com"]
@@ -33,11 +45,11 @@ async def submit_contact_form(form: ContactForm):
     Handle contact form submission.
     Sends email to admins and confirmation to the client.
     """
-    if not resend.api_key:
+    if not resend or not RESEND_API_KEY:
         logger.error("RESEND_API_KEY not configured")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Email service not configured"
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Email service not configured. Please contact the administrator."
         )
 
     try:
