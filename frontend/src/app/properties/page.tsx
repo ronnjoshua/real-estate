@@ -29,14 +29,27 @@ export default function PropertiesPage() {
   // Use Lunr.js for client-side search
   const { searchQuery, setSearchQuery, filteredProperties: searchedProperties, isSearching } = useLunrSearch(allProperties);
 
-  // Load all properties once on mount
+  // Load all properties once on mount (paginate to get all)
   useEffect(() => {
     const loadAllProperties = async () => {
       try {
         setLoading(true);
         setError('');
-        const response = await apiClient.getProperties({ limit: 1000 });
-        setAllProperties(response.properties);
+
+        // Load properties in batches (backend max limit is 100)
+        const allProps: Property[] = [];
+        let skip = 0;
+        const limit = 100;
+        let hasMore = true;
+
+        while (hasMore) {
+          const response = await apiClient.getProperties({ skip, limit });
+          allProps.push(...response.properties);
+          hasMore = response.has_more;
+          skip += limit;
+        }
+
+        setAllProperties(allProps);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load properties');
       } finally {
