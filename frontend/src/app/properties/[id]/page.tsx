@@ -2,28 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { fetchPropertyById } from '@/services/api';
 import { Property } from '@/types/property';
-
-const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
-
-const isValidUrl = (url: string) => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
+import ImageGallery from '@/components/ImageGallery';
 
 export default function PropertyDetailPage() {
   const { id } = useParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const loadProperty = async () => {
@@ -31,7 +19,7 @@ export default function PropertyDetailPage() {
         if (typeof id !== 'string') {
           throw new Error('Invalid property ID');
         }
-        
+
         const propertyData = await fetchPropertyById(id);
         setProperty(propertyData);
         setLoading(false);
@@ -69,67 +57,34 @@ export default function PropertyDetailPage() {
     );
   }
 
-  const nextImage = () => {
-    if (property.media.images && property.media.images.length > 1) {
-      setCurrentImageIndex((prev) => 
-        prev === property.media.images.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const previousImage = () => {
-    if (property.media.images && property.media.images.length > 1) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? property.media.images.length - 1 : prev - 1
-      );
-    }
-  };
-
-  // Get the current image URL with validation
-  const currentImage = property.media.images && 
-                      property.media.images.length > 0 && 
-                      isValidUrl(property.media.images[currentImageIndex])
-    ? property.media.images[currentImageIndex]
-    : PLACEHOLDER_IMAGE;
-
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            href="/properties"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Properties
+          </Link>
+        </div>
+
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="relative h-96">
-            <Image
-              src={currentImage}
+          {/* Image Gallery */}
+          <div className="relative">
+            <ImageGallery
+              images={property.media?.images || []}
               alt={property.title}
-              fill
-              style={{ objectFit: 'cover' }}
-              priority
             />
-            {property.media.images && property.media.images.length > 1 && (
-              <div className="absolute inset-0 flex items-center justify-between p-4">
-                <button
-                  onClick={previousImage}
-                  className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
-                  aria-label="Previous image"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity"
-                  aria-label="Next image"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            )}
-            <div className="absolute top-4 right-4">
-              <span className={`px-3 py-1 text-white text-sm font-semibold rounded-full ${
-                property.status === 'available' ? 'bg-green-600' : 
-                property.status === 'pending' ? 'bg-yellow-600' : 
+            {/* Status Badge */}
+            <div className="absolute top-4 right-4 z-30">
+              <span className={`px-4 py-2 text-white text-sm font-semibold rounded-full shadow-lg ${
+                property.status === 'available' ? 'bg-green-600' :
+                property.status === 'pending' ? 'bg-yellow-600' :
                 'bg-red-600'
               }`}>
                 {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
