@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { UserRole } from '@/types/user';
@@ -15,7 +15,7 @@ interface Invitation {
 }
 import Image from 'next/image';
 import { apiClient, Property } from '@/services/api';
-import CloudinaryUpload from '@/components/CloudinaryUpload';
+import PropertyForm from '@/components/PropertyForm';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
 
@@ -40,24 +40,6 @@ export default function AdminDashboard() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showPropertyForm, setShowPropertyForm] = useState(false);
-  
-  // Form state for creating/editing properties
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: 0,
-    address: '',
-    city: '',
-    state: '',
-    zip_code: '',
-    country: 'USA',
-    property_type: 'house' as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land',
-    bedrooms: 0,
-    bathrooms: 0,
-    area: 0,
-    status: 'available' as 'available' | 'sold' | 'rented' | 'pending' | 'inactive',
-    images: [] as string[]
-  });
 
   const fetchProperties = useCallback(async () => {
     try {
@@ -115,32 +97,22 @@ export default function AdminDashboard() {
     }
   };
 
-  const resetForm = useCallback(() => {
-    setFormData({
-      title: '',
-      description: '',
-      price: 0,
-      address: '',
-      city: '',
-      state: '',
-      zip_code: '',
-      country: 'USA',
-      property_type: 'house',
-      bedrooms: 0,
-      bathrooms: 0,
-      area: 0,
-      status: 'available',
-      images: []
-    });
-  }, []);
-
-  // Stable callback for image changes to prevent re-renders
-  const handleImagesChange = useCallback((newImages: string[]) => {
-    setFormData(prev => ({ ...prev, images: newImages }));
-  }, []);
-
-  const handlePropertySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePropertySubmit = useCallback(async (formData: {
+    title: string;
+    description: string;
+    price: number;
+    address: string;
+    city: string;
+    state: string;
+    zip_code: string;
+    country: string;
+    property_type: string;
+    bedrooms: number;
+    bathrooms: number;
+    area: number;
+    status: string;
+    images: string[];
+  }) => {
     try {
       const propertyData = {
         title: formData.title,
@@ -181,16 +153,15 @@ export default function AdminDashboard() {
       } else {
         await apiClient.createProperty(propertyData);
       }
-      
+
       await fetchProperties();
       setShowPropertyForm(false);
       setSelectedProperty(null);
-      resetForm();
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving property:', error);
     }
-  };
+  }, [isEditing, selectedProperty, fetchProperties]);
 
   const handleDeleteProperty = async (id: string) => {
     if (!confirm('Are you sure you want to delete this property?')) return;
@@ -203,27 +174,17 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleEditProperty = (property: Property) => {
+  const handleEditProperty = useCallback((property: Property) => {
     setSelectedProperty(property);
-    setFormData({
-      title: property.title,
-      description: property.description,
-      price: property.price,
-      address: property.location.address,
-      city: property.location.city,
-      state: property.location.state,
-      zip_code: property.location.zip_code,
-      country: property.location.country,
-      property_type: property.property_type,
-      bedrooms: property.bedrooms,
-      bathrooms: property.bathrooms,
-      area: property.area,
-      status: property.status,
-      images: property.media.images
-    });
     setIsEditing(true);
     setShowPropertyForm(true);
-  };
+  }, []);
+
+  const handleCancelForm = useCallback(() => {
+    setShowPropertyForm(false);
+    setSelectedProperty(null);
+    setIsEditing(false);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -258,7 +219,6 @@ export default function AdminDashboard() {
                   setShowPropertyForm(true);
                   setIsEditing(false);
                   setSelectedProperty(null);
-                  resetForm();
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
@@ -267,161 +227,28 @@ export default function AdminDashboard() {
             </div>
 
             {showPropertyForm && (
-              <div className="mb-8 bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  {isEditing ? 'Edit Property' : 'Add New Property'}
-                </h3>
-                <form onSubmit={handlePropertySubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Title</label>
-                      <input
-                        type="text"
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">City</label>
-                      <input
-                        type="text"
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">State</label>
-                      <input
-                        type="text"
-                        value={formData.state}
-                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Price</label>
-                      <input
-                        type="number"
-                        value={formData.price}
-                        onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Property Type</label>
-                      <select
-                        value={formData.property_type}
-                        onChange={(e) => setFormData({ ...formData, property_type: e.target.value as 'house' | 'apartment' | 'condo' | 'townhouse' | 'commercial' | 'land' })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      >
-                        <option value="house">House</option>
-                        <option value="apartment">Apartment</option>
-                        <option value="condo">Condo</option>
-                        <option value="townhouse">Townhouse</option>
-                        <option value="commercial">Commercial</option>
-                        <option value="land">Land</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Bedrooms</label>
-                      <input
-                        type="number"
-                        value={formData.bedrooms}
-                        onChange={(e) => setFormData({ ...formData, bedrooms: Number(e.target.value) })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Bathrooms</label>
-                      <input
-                        type="number"
-                        value={formData.bathrooms}
-                        onChange={(e) => setFormData({ ...formData, bathrooms: Number(e.target.value) })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Area (sqft)</label>
-                      <input
-                        type="number"
-                        value={formData.area}
-                        onChange={(e) => setFormData({ ...formData, area: Number(e.target.value) })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Status</label>
-                      <select
-                        value={formData.status}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value as 'available' | 'sold' | 'rented' | 'pending' | 'inactive' })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                      >
-                        <option value="available">Available</option>
-                        <option value="pending">Pending</option>
-                        <option value="sold">Sold</option>
-                        <option value="rented">Rented</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <input
-                      type="text"
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      rows={4}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <CloudinaryUpload
-                    images={formData.images}
-                    onImagesChange={handleImagesChange}
-                    maxImages={10}
-                  />
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShowPropertyForm(false);
-                        setSelectedProperty(null);
-                        setIsEditing(false);
-                        resetForm();
-                      }}
-                      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    >
-                      {isEditing ? 'Update Property' : 'Create Property'}
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <PropertyForm
+                key={selectedProperty?.id || 'new'}
+                initialData={selectedProperty ? {
+                  title: selectedProperty.title,
+                  description: selectedProperty.description,
+                  price: selectedProperty.price,
+                  address: selectedProperty.location.address,
+                  city: selectedProperty.location.city,
+                  state: selectedProperty.location.state,
+                  zip_code: selectedProperty.location.zip_code,
+                  country: selectedProperty.location.country,
+                  property_type: selectedProperty.property_type,
+                  bedrooms: selectedProperty.bedrooms,
+                  bathrooms: selectedProperty.bathrooms,
+                  area: selectedProperty.area,
+                  status: selectedProperty.status,
+                  images: selectedProperty.media?.images || []
+                } : undefined}
+                isEditing={isEditing}
+                onSubmit={handlePropertySubmit}
+                onCancel={handleCancelForm}
+              />
             )}
 
             <div className="overflow-x-auto">
