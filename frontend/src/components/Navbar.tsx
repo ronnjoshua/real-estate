@@ -44,8 +44,8 @@ const Navbar = () => {
               )}
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            {user ? (
+          {user && (
+            <div className="hidden sm:ml-6 sm:flex sm:items-center">
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -77,15 +77,8 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-            ) : (
-              <Link
-                href="/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Sign in
-              </Link>
-            )}
-          </div>
+            </div>
+          )}
           
           {/* Mobile menu button */}
           <div className="sm:hidden flex items-center">
@@ -151,9 +144,9 @@ const Navbar = () => {
           )}
         </div>
         
-        {/* Mobile user section */}
-        <div className="pt-4 pb-3 border-t border-gray-200">
-          {user ? (
+        {/* Mobile user section - only show when logged in */}
+        {user && (
+          <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="space-y-1">
               <div className="pl-3 pr-4 py-2 text-base font-medium text-gray-800">
                 {user.full_name}
@@ -178,18 +171,8 @@ const Navbar = () => {
                 Sign out
               </button>
             </div>
-          ) : (
-            <div className="pl-3 pr-4 py-2">
-              <Link
-                href="/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Sign in
-              </Link>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );
