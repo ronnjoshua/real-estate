@@ -394,29 +394,28 @@ def get_all_invitations() -> List[Invitation]:
 
 
 def create_initial_admin():
-    """Create initial admin user if none exists"""
+    """Create or update initial admin user"""
     session = get_session()
     if session is None:
         logger.warning("Cannot create initial admin - database not configured")
         return
 
     try:
-        # Check if any admin exists
-        admin = session.query(UserModel).filter(UserModel.role == UserRole.ADMIN).first()
-        if admin:
-            logger.info("Admin user already exists")
-            return
-
-        # Create admin user
+        # Admin credentials
         admin_email = "admin@realestate.com"
-        admin_password = "admin123"
+        admin_password = "Admin123!"
 
         # Check if this specific admin already exists
         existing = session.query(UserModel).filter(UserModel.email == admin_email).first()
         if existing:
-            logger.info("Admin user already exists")
+            # Update password to ensure it matches
+            existing.hashed_password = get_password_hash(admin_password)
+            existing.role = UserRole.ADMIN
+            session.commit()
+            logger.info(f"Updated admin user: {admin_email}")
             return
 
+        # Create new admin user
         admin_user = UserModel(
             id=str(uuid.uuid4()),
             email=admin_email,
