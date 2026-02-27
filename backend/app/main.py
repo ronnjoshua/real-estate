@@ -114,6 +114,15 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "An unexpected error occurred"}
     )
 
+# Initialize database on startup
+from .db.memory_db import initialize_database
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Starting up Real Estate API...")
+    initialize_database()
+    logger.info("Startup complete")
+
 # Include routers
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["authentication"])
 app.include_router(properties_unified.router, prefix=f"{settings.API_V1_STR}/properties", tags=["properties"])

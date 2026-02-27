@@ -133,13 +133,12 @@ async def search_properties(
     """Search properties by query string"""
     log_request_info(request)
     start_time = time.time()
-    
+
     try:
         logger.info(f"Searching properties with query: '{q}'")
-        
-        # Get all properties from memory database
-        from app.db.memory_db import properties_db
-        all_properties = list(properties_db.values())
+
+        # Get all properties from database
+        all_properties = get_properties(skip=0, limit=10000)
         
         logger.info(f"Total properties in database: {len(all_properties)}")
         
