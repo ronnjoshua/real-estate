@@ -7,11 +7,22 @@ import { fetchPropertyById } from '@/services/api';
 import { Property } from '@/types/property';
 import ImageGallery from '@/components/ImageGallery';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+
 export default function PropertyDetailPage() {
   const { id } = useParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Contact form state
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [contactStatus, setContactStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const loadProperty = async () => {
@@ -31,6 +42,43 @@ export default function PropertyDetailPage() {
 
     loadProperty();
   }, [id]);
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!property) return;
+
+    setIsSubmitting(true);
+    setContactStatus({ type: '', message: '' });
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/contact/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          phone: '',
+          message: `Property Inquiry: ${property.title}\nAddress: ${property.location.address}, ${property.location.city}, ${property.location.state}\nPrice: $${property.price.toLocaleString()}\n\nMessage:\n${contactForm.message}`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setContactStatus({ type: 'success', message: 'Your message has been sent! We will contact you soon.' });
+        setContactForm({ name: '', email: '', message: '' });
+      } else {
+        setContactStatus({ type: 'error', message: data.detail || 'Failed to send message. Please try again.' });
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setContactStatus({ type: 'error', message: 'Failed to send message. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -129,7 +177,16 @@ export default function PropertyDetailPage() {
 
             <div className="border-t pt-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Agent</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              {contactStatus.message && (
+                <div className={`p-4 rounded-md mb-6 ${
+                  contactStatus.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'
+                }`}>
+                  {contactStatus.message}
+                </div>
+              )}
+
+              <form onSubmit={handleContactSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     Your Name
@@ -137,8 +194,11 @@ export default function PropertyDetailPage() {
                   <input
                     type="text"
                     id="name"
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Enter your name"
+                    required
                   />
                 </div>
                 <div>
@@ -148,8 +208,11 @@ export default function PropertyDetailPage() {
                   <input
                     type="email"
                     id="email"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Enter your email"
+                    required
                   />
                 </div>
                 <div className="md:col-span-2">
@@ -159,19 +222,33 @@ export default function PropertyDetailPage() {
                   <textarea
                     id="message"
                     rows={4}
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     placeholder="I'm interested in this property..."
+                    required
                   ></textarea>
                 </div>
                 <div className="md:col-span-2">
                   <button
-                    type="button"
-                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors"
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center"
                   >
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending...
+                      </>
+                    ) : (
+                      'Send Message'
+                    )}
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
