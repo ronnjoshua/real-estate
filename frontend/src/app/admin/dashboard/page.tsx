@@ -15,6 +15,7 @@ interface Invitation {
 }
 import Image from 'next/image';
 import { apiClient, Property } from '@/services/api';
+import CloudinaryUpload from '@/components/CloudinaryUpload';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80';
 
@@ -389,19 +390,11 @@ export default function AdminDashboard() {
                       required
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Image URLs (one per line)</label>
-                    <textarea
-                      value={formData.images.join('\n')}
-                      onChange={(e) => {
-                        const urls = e.target.value.split('\n').filter(url => url.trim());
-                        setFormData({ ...formData, images: urls });
-                      }}
-                      rows={3}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                    />
-                  </div>
+                  <CloudinaryUpload
+                    images={formData.images}
+                    onImagesChange={(newImages) => setFormData({ ...formData, images: newImages })}
+                    maxImages={10}
+                  />
                   <div className="flex justify-end space-x-3">
                     <button
                       type="button"
