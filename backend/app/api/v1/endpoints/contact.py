@@ -24,7 +24,8 @@ else:
     logger.warning("RESEND_API_KEY not set - email functionality disabled")
 
 # Admin email addresses to receive contact form submissions
-ADMIN_EMAILS = ["ronnnucup1@gmail.com", "ejdizon0618@gmail.com"]
+# Note: Until a domain is verified in Resend, emails can only be sent to the Resend account owner
+ADMIN_EMAILS = ["nucup53@gmail.com"]
 
 
 class ContactForm(BaseModel):
@@ -154,15 +155,17 @@ async def submit_contact_form(form: ContactForm):
         </html>
         """
 
-        # Send confirmation to client
-        client_result = resend.Emails.send({
-            "from": "Real Estate <onboarding@resend.dev>",
-            "to": [form.email],
-            "subject": "Thank You for Contacting Real Estate",
-            "html": client_email_html
-        })
+        # Note: Client confirmation email is disabled until a domain is verified in Resend
+        # Once you verify a domain at resend.com/domains, uncomment the code below
+        # and change the "from" address to use your verified domain
 
-        logger.info(f"Client confirmation email sent: {client_result}")
+        # client_result = resend.Emails.send({
+        #     "from": "Real Estate <noreply@yourdomain.com>",
+        #     "to": [form.email],
+        #     "subject": "Thank You for Contacting Real Estate",
+        #     "html": client_email_html
+        # })
+        # logger.info(f"Client confirmation email sent: {client_result}")
 
         return ContactResponse(
             success=True,
